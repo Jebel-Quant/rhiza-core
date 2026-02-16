@@ -35,10 +35,10 @@ rhiza-go/
 ```
 rhiza-core/
 ├── .rhiza/make.d/
-│   ├── github.mk      # Shared
+│   ├── github.mk      # Shared infrastructure
 │   ├── docker.mk      # Shared framework
-│   ├── lfs.mk         # Shared
-│   ├── agentic.mk     # Shared
+│   ├── lfs.mk         # Shared infrastructure
+│   ├── agentic.mk     # Shared infrastructure
 │   ├── book.mk        # Shared framework
 │   └── releasing.mk   # Shared framework
 └── ...

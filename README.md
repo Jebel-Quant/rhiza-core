@@ -249,6 +249,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [GitHub Actions](https://github.com/features/actions) - For CI/CD capabilities
-- [UV](https://github.com/astral-sh/uv) - For fast Python package operations
+- [uv](https://github.com/astral-sh/uv) - For fast Python package operations
 - The open-source community for inspiration and best practices
 
