@@ -1,14 +1,14 @@
 [project]
-name = "rhiza"
-version = "0.8.0"
-description = "Reusable configuration templates for modern Python projects"
+name = "rhiza-core"
+version = "0.1.0"
+description = "Core reusable configuration templates for Rhiza language templates"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
   { name = "Thomas Schmelzer" }
 ]
-keywords = ["templates", "configuration", "ci", "ruff"]
+keywords = ["templates", "configuration", "ci", "makefile", "devops", "core"]
 classifiers = [
     "Private :: Do Not Upload",
     "Programming Language :: Python :: 3",
@@ -20,6 +20,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 dependencies = []
 
@@ -34,9 +35,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/jebel-quant/rhiza"
-Repository = "https://github.com/jebel-quant/rhiza"
-Issues = "https://github.com/jebel-quant/rhiza/issues"
+Homepage = "https://github.com/jebel-quant/rhiza-core"
+Repository = "https://github.com/jebel-quant/rhiza-core"
+Issues = "https://github.com/jebel-quant/rhiza-core/issues"
 
 [tool.deptry.package_module_name_map]
 marimo = "marimo"
