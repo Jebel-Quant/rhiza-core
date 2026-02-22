@@ -19,6 +19,7 @@ RESET := \033[0m
 # Declare phony targets (they don't produce files)
 .PHONY: \
 	help \
+    install \
 	post-bump \
 	post-install \
 	post-release \
@@ -75,7 +76,7 @@ endef
 export RHIZA_LOGO
 
 # Declare phony targets for Rhiza Core
-.PHONY: print-logo sync validate readme pre-sync post-sync pre-validate post-validate
+.PHONY: print-logo sync validate readme pre-sync post-sync pre-validate post-validate install
 
 # Hook targets (double-colon rules allow multiple definitions)
 # Note: pre-install/post-install are defined in bootstrap.mk
@@ -84,6 +85,7 @@ pre-sync:: ; @:
 post-sync:: ; @:
 pre-validate:: ; @:
 post-validate:: ; @:
+install:: ; @:
 
 ##@ Rhiza Workflows
 
