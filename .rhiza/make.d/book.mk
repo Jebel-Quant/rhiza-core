@@ -3,6 +3,29 @@
 # It provides targets for exporting Marimo notebooks to HTML (marimushka)
 # and compiling a companion book (minibook).
 
+# Default output directory for MkDocs (HTML site)
+MKDOCS_OUTPUT ?= _mkdocs
+
+# MkDocs config file location
+MKDOCS_CONFIG ?= docs/mkdocs.yml
+
+# The 'mkdocs-build' target builds the MkDocs documentation site.
+# 1. Checks if the mkdocs.yml config file exists.
+# 2. Cleans up any previous output.
+# 3. Builds the static site using mkdocs with material theme.
+mkdocs-build: ## build MkDocs documentation site
+	@printf "${BLUE}[INFO] Building MkDocs site...${RESET}\n"
+	@if [ -f "$(MKDOCS_CONFIG)" ]; then \
+	  rm -rf "$(MKDOCS_OUTPUT)"; \
+	  MKDOCS_OUTPUT_ABS="$$(pwd)/$(MKDOCS_OUTPUT)"; \
+	  ${UVX_BIN} --with mkdocs-material --with "pymdown-extensions>=10.0" mkdocs build \
+	    -f "$(MKDOCS_CONFIG)" \
+	    -d "$$MKDOCS_OUTPUT_ABS"; \
+	else \
+	  printf "${YELLOW}[WARN] $(MKDOCS_CONFIG) not found, skipping MkDocs build${RESET}\n"; \
+	fi
+
+
 # Declare phony targets (they don't produce files)
 .PHONY: marimushka mkdocs-build book test install-uv
 
@@ -26,13 +49,6 @@ install-uv::
 # when no language-specific mk file defines test
 test::
 	@printf "${BLUE}[INFO] No test target defined, skipping tests${RESET}\n"
-
-# Define a default no-op mkdocs-build target that will be used
-# when .rhiza/make.d/docs.mk doesn't exist or doesn't define mkdocs-build
-mkdocs-build:: install-uv
-	@if [ ! -f "docs/mkdocs.yml" ]; then \
-	  printf "${BLUE}[INFO] No mkdocs.yml found, skipping MkDocs${RESET}\n"; \
-	fi
 
 # Default output directory for Marimushka (HTML exports of notebooks)
 MARIMUSHKA_OUTPUT ?= _marimushka
