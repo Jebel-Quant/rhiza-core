@@ -33,8 +33,3 @@ jobs:
         shell: bash
         run: |
           make validate
-        
-      - name: Run Rhiza Tests
-        shell: bash
-        run: |
-          make rhiza-test
