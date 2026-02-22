@@ -15,33 +15,26 @@ flowchart TB
         rhizamk[rhiza.mk<br/>Core Logic]
         maked[make.d/*.mk<br/>Extensions]
         scripts[scripts/<br/>Shell Scripts]
-        reqs[requirements/<br/>Dependencies]
         template[template-bundles.yml<br/>Bundle Config]
     end
 
     subgraph Config["Configuration"]
-        pyproject[pyproject.toml]
-        ruff[ruff.toml]
-        precommit[.pre-commit-config.yaml]
         editorconfig[.editorconfig]
+        gitignore[.gitignore]
     end
 
     subgraph CI["GitHub Actions"]
-        ci[CI Workflow]
-        release[Release Workflow]
-        security[Security Workflow]
+        validate[Validate Workflow]
         sync[Sync Workflow]
+        release[Release Workflow]
     end
 
     make --> rhizamk
     local -.-> rhizamk
     rhizamk --> maked
     rhizamk --> scripts
-    maked --> reqs
-    maked --> pyproject
-    ci --> make
+    validate --> make
     release --> make
-    security --> make
     sync --> template
 ```
 
@@ -131,24 +124,30 @@ flowchart TD
 ## Template Sync Flow
 
 ```mermaid
-flowchart LR
-    upstream[Upstream Rhiza<br/>jebel-quant/rhiza] -->|template.yml| sync[make sync]
-    sync -->|updates| downstream[Downstream Project]
-
-    subgraph Synced["Synced Files"]
-        workflows[.github/workflows/]
-        rhiza[.rhiza/]
-        configs[Config Files]
+flowchart TD
+    subgraph tier1["Tier 1: rhiza-core"]
+        core[jebel-quant/rhiza-core<br/>Language-agnostic infrastructure]
+        corebundles[template-bundles.yml<br/>core, github, docker, lfs, book, release, ...]
     end
 
-    subgraph Preserved["Preserved"]
-        localmk[local.mk]
-        src[src/]
-        tests[tests/]
+    subgraph tier2["Tier 2: Language Templates"]
+        rhizapy[jebel-quant/rhiza<br/>Python template]
+        rhizago[jebel-quant/rhiza-go<br/>Go template]
+        pyconfig[template.yml → rhiza-core<br/>+ Python-specific bundles]
+        goconfig[template.yml → rhiza-core<br/>+ Go-specific bundles]
     end
 
-    sync --> Synced
-    downstream --> Preserved
+    subgraph tier3["Tier 3: User Projects"]
+        proj1[futures, taipan, ...]
+        proj2[go-services, ...]
+    end
+
+    core -->|make sync materializes files| rhizapy
+    core -->|make sync materializes files| rhizago
+    rhizapy -->|make sync| proj1
+    rhizago -->|make sync| proj2
+
+    note1["Files are physically written into<br/>each tier on sync — not resolved<br/>dynamically at build time"]
 ```
 
 ## Directory Structure
@@ -159,35 +158,30 @@ flowchart TD
 
     root --> rhiza[.rhiza/]
     root --> github[.github/]
-    root --> src[src/]
-    root --> tests[tests/]
     root --> docs[docs/]
-    root --> book[book/]
 
     rhiza --> rhizamk[rhiza.mk]
     rhiza --> maked[make.d/]
-    rhiza --> scripts[scripts/]
-    rhiza --> reqs[requirements/]
-    rhiza --> rtests[tests/]
     rhiza --> rdocs[docs/]
     rhiza --> templates[templates/]
     rhiza --> assets[assets/]
+    rhiza --> bundles[template-bundles.yml]
 
     github --> workflows[workflows/]
-    workflows --> ci[rhiza_ci.yml]
-    workflows --> release[rhiza_release.yml]
-    workflows --> security[rhiza_security.yml]
-    workflows --> more[... 11 more]
+    github --> actions[actions/]
+    workflows --> validate[rhiza_validate.yml]
+    workflows --> sync[rhiza_sync.yml]
+    workflows --> copilot[copilot-setup-steps.yml]
+    workflows --> renovate[renovate_rhiza_sync.yml]
 
     maked --> agentic[agentic.mk]
     maked --> book[book.mk]
-    maked --> bootstrap[bootstrap.mk]
     maked --> docker[docker.mk]
-    maked --> docs_mk[docs.mk]
     maked --> github_mk[github.mk]
-    maked --> marimo[marimo.mk]
-    maked --> test[test.mk]
-    maked --> more_mk[... 6 more]
+    maked --> lfs[lfs.mk]
+    maked --> releasing[releasing.mk]
+    maked --> custom_env[custom-env.mk]
+    maked --> custom_task[custom-task.mk]
 ```
 
 ## .rhiza/ Directory Structure and Dependencies
@@ -196,76 +190,49 @@ flowchart TD
 flowchart TB
     subgraph rhiza[".rhiza/ Directory"]
         direction TB
-        
+
         subgraph core["Core Files"]
-            rhizamk[rhiza.mk<br/>Core Logic - 153 lines]
+            rhizamk[rhiza.mk<br/>Core Logic]
             cfg[.cfg.toml<br/>Configuration]
             env[.env<br/>Environment]
             version[.rhiza-version<br/>Version]
             bundles[template-bundles.yml<br/>Bundle Definitions]
         end
-        
-        subgraph maked["make.d/ (14 files, ~41KB)"]
+
+        subgraph maked["make.d/ (language-agnostic)"]
             direction LR
             agentic[agentic.mk<br/>AI Agents]
-            bootstrap[bootstrap.mk<br/>Installation]
-            test[test.mk<br/>Testing]
             book_mk[book.mk<br/>Documentation]
             docker_mk[docker.mk<br/>Containers]
-            quality[quality.mk<br/>Code Quality]
+            github_mk[github.mk<br/>GitHub CLI]
+            lfs_mk[lfs.mk<br/>Git LFS]
             releasing[releasing.mk<br/>Releases]
-            more[...]
+            custom_env[custom-env.mk<br/>Env Example]
+            custom_task[custom-task.mk<br/>Task Example]
         end
-        
-        subgraph requirements["requirements/ (4 files)"]
-            direction LR
-            tests_txt[tests.txt<br/>pytest, coverage]
-            marimo_txt[marimo.txt<br/>notebooks]
-            docs_txt[docs.txt<br/>pdoc]
-            tools_txt[tools.txt<br/>pre-commit]
-        end
-        
-        subgraph tests_dir["tests/ (23 files)"]
-            direction LR
-            api[api/<br/>Makefile Tests]
-            integration[integration/<br/>E2E Tests]
-            structure[structure/<br/>Layout Tests]
-            sync[sync/<br/>Sync Tests]
-            deps[deps/<br/>Dependency Tests]
-        end
-        
+
         subgraph other["Other Directories"]
             direction LR
-            docs_dir[docs/<br/>7 MD files]
+            docs_dir[docs/<br/>Infrastructure docs]
             templates_dir[templates/<br/>minibook]
             assets_dir[assets/<br/>Logo]
             scripts_dir[scripts/<br/>Utilities]
         end
     end
-    
+
     subgraph project["Project Files"]
         Makefile[Makefile<br/>Entry Point]
-        pyproject[pyproject.toml<br/>Dependencies]
-        ruff_toml[ruff.toml<br/>Linting]
-        pytest_ini[pytest.ini<br/>Test Config]
-        python_version[.python-version<br/>Python 3.13]
+        pyproject[pyproject.toml<br/>Package metadata]
+        editorconfig[.editorconfig]
+        python_version[.python-version<br/>for uv tooling]
     end
-    
+
     Makefile -->|includes| rhizamk
     rhizamk -->|auto-loads| maked
-    maked -->|reads| pyproject
-    maked -->|reads| python_version
-    test -->|uses| pytest_ini
-    test -->|installs| tests_txt
-    book_mk -->|installs| docs_txt
-    book_mk -->|uses| marimo_txt
-    quality -->|uses| ruff_toml
-    bootstrap -->|installs| tools_txt
-    tests_dir -->|validates| core
-    tests_dir -->|validates| maked
+    book_mk -->|builds| templates_dir
 ```
 
-## CI/CD Workflow Triggers
+## CI/CD Workflow Triggers (rhiza-core)
 
 ```mermaid
 flowchart TD
@@ -278,53 +245,40 @@ flowchart TD
     end
 
     subgraph Workflows
-        ci[CI]
-        security[Security]
-        codeql[CodeQL]
+        validate[rhiza_validate]
+        sync[rhiza_sync]
         release[Release]
-        deptry[Deptry]
-        precommit[Pre-commit]
+        renovate[renovate_rhiza_sync]
     end
 
-    push --> ci
-    push --> security
-    push --> codeql
-    pr --> ci
-    pr --> deptry
-    pr --> precommit
-    schedule --> security
-    manual --> ci
+    push --> validate
+    pr --> validate
+    schedule --> sync
+    manual --> sync
     tag --> release
+    schedule --> renovate
 ```
 
-## Python Execution Model
+## Tool Execution Model
+
+rhiza-core uses `uv`/`uvx` to run rhiza-cli tooling. This is true even for language templates that are not Python — `uv` is a build-time dependency of the template management toolchain, not of the project being templated.
 
 ```mermaid
 flowchart LR
-    subgraph Commands
-        make[make test]
-        direct[Direct Python]
+    subgraph MakeTargets
+        sync[make sync]
+        validate[make validate]
+        release[make release]
     end
 
-    subgraph UV["uv Layer"]
-        uv_run[uv run]
-        uvx[uvx]
+    subgraph UVX["uvx (ephemeral)"]
+        rhizacli[rhiza CLI<br/>materialize / validate / summarise]
+        rhizatools[rhiza-tools<br/>bump / release / update-readme]
     end
 
-    subgraph Tools
-        pytest[pytest]
-        ruff[ruff]
-        hatch[hatch]
-    end
-
-    make --> uv_run
-    uv_run --> pytest
-    uv_run --> ruff
-    uvx --> hatch
-
-    direct -.->|Never| pytest
-
-    style direct stroke-dasharray: 5 5
+    sync --> rhizacli
+    validate --> rhizacli
+    release --> rhizatools
 ```
 
 ## Naming Conventions and Organization Patterns
@@ -478,10 +432,9 @@ GitHub Actions workflows use the pattern `rhiza_<feature>.yml`:
 
 ### 1. Single Source of Truth
 
-- **Python version**: `.python-version` file (not hardcoded)
-- **Rhiza version**: `.rhiza/.rhiza-version` file
-- **Dependencies**: `pyproject.toml` (not duplicated in makefiles)
-- **Bundle definitions**: `template-bundles.yml` (not scattered)
+- **Rhiza version**: `.rhiza/.rhiza-version` file (controls which rhiza-cli version is used for sync/validate)
+- **Bundle definitions**: `template-bundles.yml` (defines what language templates can inherit)
+- **Language-specific versions** (in consuming templates, not here): `.python-version`, `.go-version`, etc.
 
 ### 2. Auto-Loading Pattern
 
