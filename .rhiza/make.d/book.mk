@@ -4,7 +4,7 @@
 # and compiling a companion book (minibook).
 
 # Declare phony targets (they don't produce files)
-.PHONY: marimushka mkdocs-build book test
+.PHONY: marimushka mkdocs-build book test install-uv
 
 # Define a default no-op marimushka target that will be used
 # when book/marimo/marimo.mk doesn't exist or doesn't define marimushka
@@ -16,6 +16,11 @@ marimushka:: install-uv
 	    '<body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>' \
 	    > "${MARIMUSHKA_OUTPUT}/index.html"; \
 	fi
+
+# Define a default no-op install-uv target that will be used
+# when no language-specific mk file defines install-uv
+install-uv::
+	@printf "${BLUE}[INFO] No install-uv target defined, skipping${RESET}\n"
 
 # Define a default no-op test target that will be used
 # when no language-specific mk file defines test
