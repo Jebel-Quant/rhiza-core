@@ -241,27 +241,6 @@ bundles:
       - .github/workflows/rhiza_benchmarks.yml
 
   # ============================================================================
-  # MARIMO - Interactive Marimo notebooks
-  # ============================================================================
-  marimo:
-    description: "Interactive Marimo notebooks for data exploration and documentation"
-    standalone: true
-    requires: []
-    files:
-      # Marimo configuration
-      - .rhiza/make.d/marimo.mk
-      - .rhiza/requirements/marimo.txt
-
-      # Marimo notebooks directory
-      - book/marimo
-
-      # Documentation
-      - docs/MARIMO.md
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_marimo.yml
-
-  # ============================================================================
   # BOOK - Documentation book generation
   # ============================================================================
   book:
