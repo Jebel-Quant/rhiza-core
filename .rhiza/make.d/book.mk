@@ -1,60 +1,36 @@
-## book.mk - Book-building targets
+## book.mk - Documentation book targets
 # This file is included by the main Makefile.
-# It provides targets for exporting Marimo notebooks to HTML (marimushka)
-# and compiling a companion book (minibook).
+# For Go projects, the book target compiles documentation from
+# Go doc output, test coverage reports, and test results.
 
-# Default output directory for MkDocs (HTML site)
+# Declare phony targets (they don't produce files)
+.PHONY: book mkdocs-build
+
+# Default output directory for MkDocs
 MKDOCS_OUTPUT ?= _mkdocs
 
 # MkDocs config file location
 MKDOCS_CONFIG ?= docs/mkdocs.yml
 
-# The 'mkdocs-build' target builds the MkDocs documentation site.
-# 1. Checks if the mkdocs.yml config file exists.
-# 2. Cleans up any previous output.
-# 3. Builds the static site using mkdocs with material theme.
-mkdocs-build: ## build MkDocs documentation site
+# Book configuration
+BOOK_TITLE ?= $(shell basename $(PWD))
+BOOK_SUBTITLE ?= Project Documentation
+BOOK_TEMPLATE ?= .rhiza/templates/minibook/custom.html.jinja2
+
+##@ Book
+
+# Build MkDocs documentation site
+mkdocs-build:: install-uv ## build mkdocs documentation site
 	@printf "${BLUE}[INFO] Building MkDocs site...${RESET}\n"
 	@if [ -f "$(MKDOCS_CONFIG)" ]; then \
 	  rm -rf "$(MKDOCS_OUTPUT)"; \
 	  MKDOCS_OUTPUT_ABS="$$(pwd)/$(MKDOCS_OUTPUT)"; \
-	  ${UVX_BIN} --with mkdocs-material --with "pymdown-extensions>=10.0" mkdocs build \
+	  $(UVX_BIN) --from "mkdocs<2" --with "mkdocs-material<9.6" --with "pymdown-extensions>=10.0" mkdocs build \
 	    -f "$(MKDOCS_CONFIG)" \
 	    -d "$$MKDOCS_OUTPUT_ABS"; \
 	else \
 	  printf "${YELLOW}[WARN] $(MKDOCS_CONFIG) not found, skipping MkDocs build${RESET}\n"; \
 	fi
-
-
-# Declare phony targets (they don't produce files)
-.PHONY: marimushka mkdocs-build book test install-uv
-
-# Define a default no-op marimushka target that will be used
-# when book/marimo/marimo.mk doesn't exist or doesn't define marimushka
-marimushka:: install-uv
-	@if [ ! -d "book/marimo" ]; then \
-	  printf "${BLUE}[INFO] No Marimo directory found, creating placeholder${RESET}\n"; \
-	  mkdir -p "${MARIMUSHKA_OUTPUT}"; \
-	  printf '%s\n' '<html><head><title>Marimo Notebooks</title></head>' \
-	    '<body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>' \
-	    > "${MARIMUSHKA_OUTPUT}/index.html"; \
-	fi
-
-# Define a default no-op install-uv target that will be used
-# when no language-specific mk file defines install-uv
-install-uv::
-	@printf "${BLUE}[INFO] No install-uv target defined, skipping${RESET}\n"
-
-# Define a default no-op test target that will be used
-# when no language-specific mk file defines test
-test::
-	@printf "${BLUE}[INFO] No test target defined, skipping tests${RESET}\n"
-
-# Default output directory for Marimushka (HTML exports of notebooks)
-MARIMUSHKA_OUTPUT ?= _marimushka
-
-# Default output directory for MkDocs
-MKDOCS_OUTPUT ?= _mkdocs
 
 # ----------------------------
 # Book sections (declarative)
@@ -62,52 +38,46 @@ MKDOCS_OUTPUT ?= _mkdocs
 # format:
 #   name | source index | book-relative index | source dir | book dir
 
+# Module path for external API link
+GO_MODULE ?= $(shell grep '^module ' go.mod | awk '{print $$2}')
+
+# Optional: set to your project's official documentation URL to include it in the book navigation.
+# e.g. OFFICIAL_DOCS_URL = https://myproject.example.com
+OFFICIAL_DOCS_URL ?=
+
 BOOK_SECTIONS := \
-  "API|_pdoc/index.html|pdoc/index.html|_pdoc|pdoc" \
-  "Coverage|_tests/html-coverage/index.html|tests/html-coverage/index.html|_tests/html-coverage|tests/html-coverage" \
-  "Test Report|_tests/html-report/report.html|tests/html-report/report.html|_tests/html-report|tests/html-report" \
-  "Notebooks|_marimushka/index.html|marimushka/index.html|_marimushka|marimushka" \
-  "Official Documentation|_mkdocs/index.html|docs/index.html|_mkdocs|docs"
+  "Official Documentation|$(MKDOCS_OUTPUT)/index.html|docs/index.html|$(MKDOCS_OUTPUT)|docs" \
+  "Test Report|test-report.html|tests/index.html|test-report.html|tests" \
+  "Coverage|coverage.html|coverage/index.html|coverage.html|coverage"
 
-##@ Book
-
-# The 'book' target assembles the final documentation book.
-# 1. Aggregates API docs, coverage, test reports, notebooks, and MkDocs site into _book.
-# 2. Generates links.json to define the book structure.
-# 3. Uses 'minibook' to compile the final HTML site.
-book:: test docs marimushka mkdocs-build ## compile the companion book
+# The 'book' target assembles documentation from available sources.
+# 1. Aggregates Go documentation, coverage reports, and test results into _book.
+# 2. Uses minibook to create a unified documentation site.
+book:: test docs mkdocs-build ## compile the companion documentation book
 	@printf "${BLUE}[INFO] Building combined documentation...${RESET}\n"
 	@rm -rf _book && mkdir -p _book
 
-	@if [ -f "_tests/coverage.json" ]; then \
-	  printf "${BLUE}[INFO] Generating coverage badge JSON...${RESET}\n"; \
-	  mkdir -p _book/tests; \
-	  ${UV_BIN} run python -c "\
-import json; \
-data = json.load(open('_tests/coverage.json')); \
-pct = int(data['totals']['percent_covered']); \
-color = 'brightgreen' if pct >= 90 else 'green' if pct >= 80 else 'yellow' if pct >= 70 else 'orange' if pct >= 60 else 'red'; \
-badge = {'schemaVersion': 1, 'label': 'coverage', 'message': f'{pct}%', 'color': color}; \
-json.dump(badge, open('_book/tests/coverage-badge.json', 'w'))"; \
-	  printf "${BLUE}[INFO] Coverage badge JSON:${RESET}\n"; \
-	  cat _book/tests/coverage-badge.json; \
-	  printf "\n"; \
-	else \
-	  printf "${YELLOW}[WARN] No coverage.json found, skipping badge generation${RESET}\n"; \
-	fi
-
 	@printf "{\n" > _book/links.json
-	@first=1; \
+	@printf '  "API": "./docs/API/index.html"' >> _book/links.json
+	@if [ -n "$(OFFICIAL_DOCS_URL)" ]; then \
+	  printf ",\n" >> _book/links.json; \
+	  printf '  "Official Docs": "%s"' "$(OFFICIAL_DOCS_URL)" >> _book/links.json; \
+	fi
+	@first=0; \
 	for entry in $(BOOK_SECTIONS); do \
 	  name=$${entry%%|*}; \
 	  rest=$${entry#*|}; \
 	  src_index=$${rest%%|*}; rest=$${rest#*|}; \
 	  book_index=$${rest%%|*}; rest=$${rest#*|}; \
-	  src_dir=$${rest%%|*}; book_dir=$${rest#*|}; \
+	  src_path=$${rest%%|*}; book_dir=$${rest#*|}; \
 	  if [ -f "$$src_index" ]; then \
 	    printf "${BLUE}[INFO] Adding $$name...${RESET}\n"; \
 	    mkdir -p "_book/$$book_dir"; \
-	    cp -r "$$src_dir/"* "_book/$$book_dir"; \
+	    if [ -d "$$src_path" ]; then \
+	      cp -r "$$src_path/"* "_book/$$book_dir/"; \
+	    else \
+	      cp "$$src_path" "_book/$$book_index"; \
+	    fi; \
 	    if [ $$first -eq 0 ]; then \
 	      printf ",\n" >> _book/links.json; \
 	    fi; \
@@ -129,7 +99,7 @@ json.dump(badge, open('_book/tests/coverage-badge.json', 'w'))"; \
 	fi; \
 	if [ -n "$(LOGO_FILE)" ]; then \
 	  if [ -f "$(LOGO_FILE)" ]; then \
-	    cp "$(LOGO_FILE)" "_book/logo$$(echo $(LOGO_FILE) | sed 's/.*\./\./')"; \
+	    cp "$(LOGO_FILE)" "_book/logo$$(echo $(LOGO_FILE) | sed 's/.*\(\.[^.]*\)$$/\1/')"; \
 	    printf "${BLUE}[INFO] Copying logo: $(LOGO_FILE)${RESET}\n"; \
 	  else \
 	    printf "${YELLOW}[WARN] Logo file $(LOGO_FILE) not found, skipping${RESET}\n"; \
@@ -143,3 +113,4 @@ json.dump(badge, open('_book/tests/coverage-badge.json', 'w'))"; \
 	  --output "_book"
 
 	@touch "_book/.nojekyll"
+	@printf "${BLUE}[INFO] Documentation book generated in _book/${RESET}\n"
