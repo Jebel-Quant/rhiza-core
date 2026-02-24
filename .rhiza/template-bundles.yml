@@ -1,34 +1,34 @@
-# Rhiza Template Bundle Definitions
+# Rhiza Core Template Bundle Definitions
 #
-# This file defines template bundles - pre-configured sets of files that can be
-# included in downstream projects by selecting templates instead of listing
-# individual file paths.
+# This file defines LANGUAGE-AGNOSTIC template bundles that can be inherited
+# by language-specific Rhiza templates (rhiza, rhiza-go, etc.).
 #
-# Usage in downstream projects (.rhiza/template.yml):
+# Usage in language-specific templates (.rhiza/template.yml):
+#
+#   repository: Jebel-Quant/rhiza-core
+#   ref: v0.1.0
 #
 #   templates:
-#     - tests
+#     - core
+#     - github
 #     - docker
-#     - marimo
+#     - lfs
 #
-# Instead of manually listing:
-#
-#   include: |
-#     .rhiza/make.d/test.mk
-#     pytest.ini
-#     docker/Dockerfile
-#     ...
+# Language-specific templates should define their own bundles for:
+# - Testing frameworks (pytest, go test, cargo test, etc.)
+# - Quality tools (ruff, golangci-lint, clippy, etc.)
+# - Build systems (uv, cargo, go modules, npm, etc.)
 
 # Schema version for this bundles file format
-version: "0.7.1"
+version: "0.1.0"
 
 # Bundle Definitions
 bundles:
   # ============================================================================
-  # CORE - Required infrastructure
+  # CORE - Required language-agnostic infrastructure
   # ============================================================================
   core:
-    description: "Core Rhiza infrastructure"
+    description: "Core language-agnostic Rhiza infrastructure"
     required: true
     standalone: true
     files:
@@ -39,49 +39,34 @@ bundles:
       - .rhiza/.gitignore
       - .rhiza/.rhiza-version
       - .rhiza/make.d/custom-env.mk
-      - .rhiza/make.d/docs.mk
       - .rhiza/make.d/custom-task.mk
-      - .rhiza/make.d/quality.mk
-      - .rhiza/make.d/bootstrap.mk
-      - .rhiza/make.d/releasing.mk
       - .rhiza/make.d/README.md
-      - .rhiza/scripts
       - .rhiza/docs
       - .rhiza/assets
-      - .rhiza/requirements/README.md
-      - .rhiza/requirements/docs.txt
-      - .rhiza/requirements/tools.txt
 
-      # Root configuration files
-      - Makefile
-      - .pre-commit-config.yaml
+      # Root configuration files (language-agnostic)
       - .editorconfig
       - .gitignore
-      - .python-version
-      - ruff.toml
 
-      # Documentation files (user-facing docs)
-      - docs/SECURITY.md
-      - docs/ARCHITECTURE.md
-      - docs/CUSTOMIZATION.md
-      - docs/GLOSSARY.md
-      - docs/QUICK_REFERENCE.md
-      - docs/DEMO.md
+      # Documentation files
+      - docs/TEMPLATE_DEVELOPMENT.md
 
+  # ============================================================================
+  # GITHUB - GitHub Actions and GitHub CLI helpers
+  # ============================================================================
   github:
-    description: "GitHub Actions workflows for CI/CD"
+    description: "GitHub Actions workflows and GitHub CLI helpers (language-agnostic)"
     standalone: true
     requires: [core]
     files:
+      # Make targets for GitHub CLI
       - .rhiza/make.d/github.mk
       - .rhiza/make.d/agentic.mk
-      # Core GitHub Actions workflows
+      
+      # Core GitHub Actions workflows (language-agnostic)
       - .github/workflows/copilot-setup-steps.yml
       - .github/workflows/rhiza_validate.yml
       - .github/workflows/rhiza_sync.yml
-      - .github/workflows/rhiza_pre-commit.yml
-      - .github/workflows/rhiza_deptry.yml
-      - .github/workflows/rhiza_release.yml
       - .github/actions/configure-git-auth
       - .github/dependabot.yml
       - .github/copilot-instructions.md
@@ -115,43 +100,18 @@ bundles:
       - CODE_OF_CONDUCT.md
 
   # ============================================================================
-  # DEVCONTAINER - VS Code DevContainer configuration
-  # ============================================================================
-  devcontainer:
-    description: "VS Code DevContainer configuration for consistent development environments"
-    standalone: true
-    requires: []
-    files:
-      # DevContainer configuration
-      - .devcontainer/devcontainer.json
-      - .devcontainer/bootstrap.sh
-
-      # Documentation
-      - docs/DEVCONTAINER.md
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_devcontainer.yml
-
-  # ============================================================================
   # DOCKER - Docker containerization support
   # ============================================================================
   docker:
-    description: "Docker containerization support for building and running containers"
+    description: "Docker containerization support (language-agnostic make targets)"
     standalone: true
     requires: []
     files:
-      # Docker configuration and files
-      - docker/Dockerfile
-      - docker/Dockerfile.dockerignore
-
-      # Make targets
+      # Make targets (language-agnostic)
       - .rhiza/make.d/docker.mk
-
-      # Documentation
-      - docs/DOCKER.md
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_docker.yml
+      
+      # Note: Dockerfile itself is language-specific and should be
+      # provided by rhiza-<language> templates
 
   # ============================================================================
   # LFS - Git Large File Storage support
@@ -168,121 +128,30 @@ bundles:
       - .rhiza/docs/LFS.md
 
   # ============================================================================
-  # PRESENTATION - Presentation building with reveal.js
-  # ============================================================================
-  presentation:
-    description: "Presentation building using reveal.js and Marimo"
-    standalone: true
-    requires: []
-    recommends:
-      - marimo  # Presentations often use Marimo for interactive slides
-    files:
-      - .rhiza/make.d/presentation.mk
-      - docs/PRESENTATION.md
-
-  # ============================================================================
-  # GITLAB - GitLab CI/CD pipeline configuration
-  # ============================================================================
-  gitlab:
-    description: "GitLab CI/CD pipeline configuration and workflows"
-    standalone: true
-    requires: [core]
-    notes: |
-      GitLab workflows provide similar functionality to GitHub Actions.
-      Some workflows (like book, ci) may benefit from having their
-      corresponding feature templates (book, tests) also enabled.
-    files:
-      # Main GitLab CI configuration
-      - .gitlab-ci.yml
-
-      # GitLab workflow files
-      - .gitlab/workflows/rhiza_book.yml
-      - .gitlab/workflows/rhiza_ci.yml
-      - .gitlab/workflows/rhiza_deptry.yml
-      - .gitlab/workflows/rhiza_pre-commit.yml
-      - .gitlab/workflows/rhiza_release.yml
-      - .gitlab/workflows/rhiza_renovate.yml
-      - .gitlab/workflows/rhiza_sync.yml
-      - .gitlab/workflows/rhiza_validate.yml
-
-      # GitLab templates
-      - .gitlab/template
-
-      # GitLab documentation
-      - .gitlab/COMPARISON.md
-      - .gitlab/README.md
-      - .gitlab/SUMMARY.md
-      - .gitlab/TESTING.md
-
-  # ============================================================================
-  # TESTS - Testing infrastructure with pytest, coverage, and type checking
-  # ============================================================================
-  tests:
-    description: "Testing infrastructure with pytest, coverage, and type checking"
-    standalone: true
-    requires: []
-    files:
-      # Make targets and configuration
-      - .rhiza/make.d/test.mk
-      - .rhiza/requirements/tests.txt
-      - pytest.ini
-
-      # Core/generic test files
-      - .rhiza/tests
-
-      # Benchmark and stress test infrastructure
-      - tests/benchmarks
-      - docs/TESTS.md
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_ci.yml
-      - .github/workflows/rhiza_security.yml
-      - .github/workflows/rhiza_codeql.yml
-      - .github/workflows/rhiza_benchmarks.yml
-
-  # ============================================================================
-  # MARIMO - Interactive Marimo notebooks
-  # ============================================================================
-  marimo:
-    description: "Interactive Marimo notebooks for data exploration and documentation"
-    standalone: true
-    requires: []
-    files:
-      # Marimo configuration
-      - .rhiza/make.d/marimo.mk
-      - .rhiza/requirements/marimo.txt
-
-      # Marimo notebooks directory
-      - book/marimo
-
-      # Documentation
-      - docs/MARIMO.md
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_marimo.yml
-
-  # ============================================================================
-  # BOOK - Documentation book generation
+  # BOOK - Documentation book generation (language-agnostic framework)
   # ============================================================================
   book:
-    description: |
-      Comprehensive documentation book generation combining:
-      - API documentation (pdoc)
-      - Test coverage reports
-      - Test results
-      - Interactive notebooks (if marimo is enabled)
-    standalone: false
-    requires:
-      - tests  # Required: book needs test coverage and reports
-    recommends:
-      - marimo  # Optional: book works better with notebook exports
+    description: "Documentation book generation framework using minibook"
+    standalone: true
+    requires: []
     files:
-      # Book building configuration
+      # Book building configuration (language-agnostic)
       - .rhiza/make.d/book.mk
       - .rhiza/templates/minibook
+      
+      # Note: Language-specific templates should add their own
+      # documentation requirements and configurations
 
-      # Documentation
-      - docs/BOOK.md
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_book.yml
+  # ============================================================================
+  # RELEASE - Release automation and version management
+  # ============================================================================
+  release:
+    description: "Release automation and version management (language-agnostic framework)"
+    standalone: true
+    requires: [core]
+    files:
+      # Release Make targets
+      - .rhiza/make.d/releasing.mk
+      
+      # Note: Language-specific release workflows (PyPI, Go modules, npm, etc.)
+      # should be provided by rhiza-<language> templates

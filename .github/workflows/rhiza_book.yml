@@ -50,14 +50,6 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
-      - name: "Sync the virtual environment for ${{ github.repository }}"
-        shell: bash
-        env:
-          UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}
-        run: |
-          # will just use .python-version?
-          uv sync --all-extras --all-groups --frozen
-
       - name: "Make the book"
         env:
           UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}

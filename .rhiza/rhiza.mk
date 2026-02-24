@@ -1,7 +1,7 @@
-## Makefile for jebel-quant/rhiza
-# (https://github.com/jebel-quant/rhiza)
+## Makefile for jebel-quant/rhiza-core
+# (https://github.com/jebel-quant/rhiza-core)
 #
-# Purpose: Developer tasks using uv/uvx (install, test, docs, marimushka, book).
+# Purpose: Language-agnostic infrastructure tasks (sync, validate, release, docs).
 # Lines with `##` after a target are parsed into help text,
 # and lines starting with `##@` create section headers in the help output.
 #
@@ -19,6 +19,7 @@ RESET := \033[0m
 # Declare phony targets (they don't produce files)
 .PHONY: \
 	help \
+    install \
 	post-bump \
 	post-install \
 	post-release \
@@ -33,8 +34,7 @@ RESET := \033[0m
 	readme \
 	summarise-sync \
 	sync \
-	validate \
-	version-matrix
+	validate
 
 # we need absolute paths!
 INSTALL_DIR ?= $(abspath ./bin)
@@ -76,7 +76,7 @@ endef
 export RHIZA_LOGO
 
 # Declare phony targets for Rhiza Core
-.PHONY: print-logo sync validate readme pre-sync post-sync pre-validate post-validate
+.PHONY: print-logo sync validate readme pre-sync post-sync pre-validate post-validate install
 
 # Hook targets (double-colon rules allow multiple definitions)
 # Note: pre-install/post-install are defined in bootstrap.mk
@@ -85,6 +85,7 @@ pre-sync:: ; @:
 post-sync:: ; @:
 pre-validate:: ; @:
 post-validate:: ; @:
+install:: ; @:
 
 ##@ Rhiza Workflows
 
@@ -93,8 +94,8 @@ print-logo:
 
 
 sync: pre-sync ## sync with template repository as defined in .rhiza/template.yml
-	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(\.git)?$$'; then \
-		printf "${BLUE}[INFO] Skipping sync in rhiza repository (no template.yml by design)${RESET}\n"; \
+	@if [ ! -f ".rhiza/template.yml" ]; then \
+		printf "${BLUE}[INFO] Skipping sync: no .rhiza/template.yml found${RESET}\n"; \
 	else \
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=$(RHIZA_VERSION)" materialize --force .; \
@@ -102,8 +103,8 @@ sync: pre-sync ## sync with template repository as defined in .rhiza/template.ym
 	@$(MAKE) post-sync
 
 summarise-sync: install-uv ## summarise differences created by sync with template repository
-	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(\.git)?$$'; then \
-		printf "${BLUE}[INFO] Skipping summarise-sync in rhiza repository (no template.yml by design)${RESET}\n"; \
+	@if [ ! -f ".rhiza/template.yml" ]; then \
+		printf "${BLUE}[INFO] Skipping summarise-sync: no .rhiza/template.yml found${RESET}\n"; \
 	else \
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=$(RHIZA_VERSION)" summarise .; \
@@ -117,8 +118,8 @@ rhiza-test: install ## run rhiza's own tests (if any)
 	fi
 
 validate: pre-validate rhiza-test ## validate project structure against template repository as defined in .rhiza/template.yml
-	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(\.git)?$$'; then \
-		printf "${BLUE}[INFO] Skipping validate in rhiza repository (no template.yml by design)${RESET}\n"; \
+	@if [ ! -f ".rhiza/template.yml" ]; then \
+		printf "${BLUE}[INFO] Skipping validate: no .rhiza/template.yml found${RESET}\n"; \
 	else \
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=$(RHIZA_VERSION)" validate .; \
@@ -136,9 +137,6 @@ help: print-logo ## Display this help message
 	+@printf "$(BOLD)Targets:$(RESET)\n"
 	+@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  $(BLUE)%-20s$(RESET) %s\n", $$1, $$2 } /^##@/ { printf "\n$(BOLD)%s$(RESET)\n", substr($$0, 5) }' $(MAKEFILE_LIST)
 	+@printf "\n"
-
-version-matrix: install-uv ## Emit the list of supported Python versions from pyproject.toml
-	@${UVX_BIN} "rhiza-tools>=0.2.2" version-matrix
 
 print-% : ## print the value of a variable (usage: make print-VARIABLE)
 	@printf "${BLUE}[INFO] Printing value of variable '$*':${RESET}\n"

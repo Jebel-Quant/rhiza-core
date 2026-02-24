@@ -1,0 +1,135 @@
+# Example .rhiza/template.yml for Language-Specific Templates
+#
+# This file shows how to configure a language-specific Rhiza template
+# (e.g., rhiza-python, rhiza-go, rhiza-rust) to inherit from rhiza-core.
+#
+# Copy this to your language template repository as `.rhiza/template.yml`
+# and uncomment/adjust the sections you need.
+
+# ============================================================================
+# Repository Configuration
+# ============================================================================
+
+# Point to rhiza-core for shared infrastructure
+repository: Jebel-Quant/rhiza-core
+
+# Use a specific version tag for stability (recommended)
+# Or use 'main' for latest changes (useful during development)
+ref: v0.1.0
+
+# ============================================================================
+# Template Bundles (Recommended Approach)
+# ============================================================================
+
+# Select language-agnostic bundles from rhiza-core
+templates:
+  - core         # Required: Core infrastructure
+  - github       # GitHub Actions and CLI helpers
+  - docker       # Docker support (framework only)
+  - lfs          # Git LFS support (if needed)
+  - legal        # Legal and community files
+  - renovate     # Renovate dependency automation
+  - book         # Documentation book framework
+  - release      # Release automation framework
+
+# ============================================================================
+# Fine-Grained File Inclusion (Alternative Approach)
+# ============================================================================
+
+# If you need more control, you can explicitly list files
+# This approach gives you complete control over what gets inherited
+
+# include: |
+#   # Core infrastructure
+#   .rhiza/rhiza.mk
+#   .rhiza/.cfg.toml
+#   .rhiza/.env
+#   .rhiza/.gitignore
+#   .rhiza/.rhiza-version
+#   .rhiza/make.d/custom-env.mk
+#   .rhiza/make.d/custom-task.mk
+#   .rhiza/make.d/README.md
+#   
+#   # GitHub helpers
+#   .rhiza/make.d/github.mk
+#   .rhiza/make.d/agentic.mk
+#   .github/workflows/copilot-setup-steps.yml
+#   .github/workflows/rhiza_validate.yml
+#   .github/workflows/rhiza_sync.yml
+#   
+#   # Docker support
+#   .rhiza/make.d/docker.mk
+#   
+#   # Configuration files
+#   .editorconfig
+#   .gitignore
+#   
+#   # Legal and community
+#   LICENSE
+#   CODE_OF_CONDUCT.md
+#   CONTRIBUTING.md
+
+# ============================================================================
+# Exclusions
+# ============================================================================
+
+# Exclude files that your language template will override
+exclude: |
+  # Language-specific makefiles you'll override
+  .rhiza/make.d/bootstrap.mk
+  .rhiza/make.d/quality.mk
+  .rhiza/make.d/test.mk
+  
+  # Language-specific configurations
+  .rhiza/requirements/
+  
+  # Python-specific files (if not a Python template)
+  .python-version
+  pyproject.toml
+  pytest.ini
+  ruff.toml
+  
+  # Go-specific files (if not a Go template)
+  .go-version
+  go.mod
+  go.sum
+  .golangci.yml
+  
+  # Language-specific CI workflows
+  .github/workflows/rhiza_ci.yml
+  .github/workflows/rhiza_pre-commit.yml
+  .github/workflows/rhiza_deptry.yml
+  
+  # Language-specific scripts and customizations
+  .rhiza/scripts/customisations/
+
+# ============================================================================
+# Notes for Language-Specific Templates
+# ============================================================================
+
+# Your language template should provide:
+# 
+# 1. Language-Specific Makefiles:
+#    - .rhiza/make.d/bootstrap.mk (setup and install)
+#    - .rhiza/make.d/quality.mk (linting, formatting)
+#    - .rhiza/make.d/test.mk (testing framework)
+#    - .rhiza/make.d/docs.mk (if language-specific docs needed)
+#
+# 2. Language-Specific Configuration:
+#    - Build system files (Cargo.toml, go.mod, package.json, etc.)
+#    - Linter/formatter configs
+#    - Test framework configs
+#    - Version files (.python-version, .go-version, etc.)
+#
+# 3. Language-Specific CI/CD:
+#    - .github/workflows/rhiza_ci.yml
+#    - .github/workflows/rhiza_pre-commit.yml
+#    - .github/workflows/rhiza_release.yml (language-specific publishing)
+#    - .github/workflows/rhiza_deptry.yml (or equivalent)
+#
+# 4. Language-Specific Documentation:
+#    - docs/DEPENDENCIES.md
+#    - docs/TESTING.md
+#    - docs/QUICK_REFERENCE.md
+#
+# See docs/TEMPLATE_DEVELOPMENT.md for detailed guidance.
