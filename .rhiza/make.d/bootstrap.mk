@@ -1,116 +1,58 @@
-## book.mk - Documentation book targets
-# This file is included by the main Makefile.
-# For Go projects, the book target compiles documentation from
-# Go doc output, test coverage reports, and test results.
+## .rhiza/make.d/bootstrap.mk - Bootstrap and Installation
+# This file provides non-Go targets for setting up the development environment,
+# installing dependencies, and cleaning project artifacts.
+# Go-specific targets (install-go, install, build) are in bootstrap-go.mk.
 
 # Declare phony targets (they don't produce files)
-.PHONY: book mkdocs-build
+.PHONY: install-uv clean pre-install post-install
 
-# Default output directory for MkDocs
-MKDOCS_OUTPUT ?= _mkdocs
+# Hook targets (double-colon rules allow multiple definitions)
+pre-install:: ; @:
+post-install:: ; @:
 
-# MkDocs config file location
-MKDOCS_CONFIG ?= docs/mkdocs.yml
+##@ Bootstrap
+install-uv: ## ensure uv/uvx is installed
+	# Ensure the ${INSTALL_DIR} folder exists
+	@mkdir -p ${INSTALL_DIR}
 
-# Book configuration
-BOOK_TITLE ?= $(shell basename $(PWD))
-BOOK_SUBTITLE ?= Go Project Documentation
-BOOK_TEMPLATE ?= .rhiza/templates/minibook/custom.html.jinja2
-
-##@ Book
-
-# Build MkDocs documentation site
-mkdocs-build:: install-uv ## build mkdocs documentation site
-	@printf "${BLUE}[INFO] Building MkDocs site...${RESET}\n"
-	@if [ -f "$(MKDOCS_CONFIG)" ]; then \
-	  rm -rf "$(MKDOCS_OUTPUT)"; \
-	  MKDOCS_OUTPUT_ABS="$$(pwd)/$(MKDOCS_OUTPUT)"; \
-	  $(UVX_BIN) --from "mkdocs<2" --with "mkdocs-material<9.6" --with "pymdown-extensions>=10.0" mkdocs build \
-	    -f "$(MKDOCS_CONFIG)" \
-	    -d "$$MKDOCS_OUTPUT_ABS"; \
+	# Install uv/uvx only if they are not already present in PATH or in the install dir
+	@if command -v uv >/dev/null 2>&1 && command -v uvx >/dev/null 2>&1; then \
+	  :; \
+	elif [ -x "${INSTALL_DIR}/uv" ] && [ -x "${INSTALL_DIR}/uvx" ]; then \
+	  printf "${BLUE}[INFO] uv and uvx already installed in ${INSTALL_DIR}, skipping.${RESET}\n"; \
 	else \
-	  printf "${YELLOW}[WARN] $(MKDOCS_CONFIG) not found, skipping MkDocs build${RESET}\n"; \
+	  printf "${BLUE}[INFO] Installing uv and uvx into ${INSTALL_DIR}...${RESET}\n"; \
+	  if ! curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR="${INSTALL_DIR}" sh >/dev/null 2>&1; then \
+	    printf "${RED}[ERROR] Failed to install uv${RESET}\n"; \
+	    exit 1; \
+	  fi; \
 	fi
 
-# ----------------------------
-# Book sections (declarative)
-# ----------------------------
-# format:
-#   name | source index | book-relative index | source dir | book dir
+clean: ## Clean project artifacts and stale local branches
+	@printf "%bCleaning project...%b\n" "$(BLUE)" "$(RESET)"
 
-# Module path for external API link
-GO_MODULE ?= $(shell grep '^module ' go.mod | awk '{print $$2}')
+	# Clean Go build cache and test cache
+	@$(GO_BIN) clean -cache -testcache -modcache || true
 
-# Optional: set to your project's official documentation URL to include it in the book navigation.
-# e.g. OFFICIAL_DOCS_URL = https://myproject.example.com
-OFFICIAL_DOCS_URL ?=
+	# Remove ignored files/directories, but keep .env files, tested with futures project
+	@git clean -d -X -f \
+		-e '!.env' \
+		-e '!.env.*'
 
-BOOK_SECTIONS := \
-  "Official Documentation|$(MKDOCS_OUTPUT)/index.html|docs/index.html|$(MKDOCS_OUTPUT)|docs" \
-  "Test Report|test-report.html|tests/index.html|test-report.html|tests" \
-  "Coverage|coverage.html|coverage/index.html|coverage.html|coverage"
+	# Remove build artifacts
+	@rm -rf \
+		dist \
+		build \
+		coverage.out \
+		coverage.html \
+		test-output.json \
+		test-report.xml \
+		test-report.html \
+		*.test \
+		*.prof
 
-# The 'book' target assembles documentation from available sources.
-# 1. Aggregates Go documentation, coverage reports, and test results into _book.
-# 2. Uses minibook to create a unified documentation site.
-book:: test docs mkdocs-build ## compile the companion documentation book
-	@printf "${BLUE}[INFO] Building combined documentation...${RESET}\n"
-	@rm -rf _book && mkdir -p _book
+	@printf "%bRemoving local branches with no remote counterpart...%b\n" "$(BLUE)" "$(RESET)"
 
-	@printf "{\n" > _book/links.json
-	@printf '  "API": "./docs/API/index.html"' >> _book/links.json
-	@if [ -n "$(OFFICIAL_DOCS_URL)" ]; then \
-	  printf ",\n" >> _book/links.json; \
-	  printf '  "Official Docs": "%s"' "$(OFFICIAL_DOCS_URL)" >> _book/links.json; \
-	fi
-	@first=0; \
-	for entry in $(BOOK_SECTIONS); do \
-	  name=$${entry%%|*}; \
-	  rest=$${entry#*|}; \
-	  src_index=$${rest%%|*}; rest=$${rest#*|}; \
-	  book_index=$${rest%%|*}; rest=$${rest#*|}; \
-	  src_path=$${rest%%|*}; book_dir=$${rest#*|}; \
-	  if [ -f "$$src_index" ]; then \
-	    printf "${BLUE}[INFO] Adding $$name...${RESET}\n"; \
-	    mkdir -p "_book/$$book_dir"; \
-	    if [ -d "$$src_path" ]; then \
-	      cp -r "$$src_path/"* "_book/$$book_dir/"; \
-	    else \
-	      cp "$$src_path" "_book/$$book_index"; \
-	    fi; \
-	    if [ $$first -eq 0 ]; then \
-	      printf ",\n" >> _book/links.json; \
-	    fi; \
-	    printf "  \"%s\": \"./%s\"" "$$name" "$$book_index" >> _book/links.json; \
-	    first=0; \
-	  else \
-	    printf "${YELLOW}[WARN] Missing $$name, skipping${RESET}\n"; \
-	  fi; \
-	done; \
-	printf "\n}\n" >> _book/links.json
+	@git fetch --prune
 
-	@printf "${BLUE}[INFO] Generated links.json:${RESET}\n"
-	@cat _book/links.json
-
-	@TEMPLATE_ARG=""; \
-	if [ -f "$(BOOK_TEMPLATE)" ]; then \
-	  TEMPLATE_ARG="--template $(BOOK_TEMPLATE)"; \
-	  printf "${BLUE}[INFO] Using book template $(BOOK_TEMPLATE)${RESET}\n"; \
-	fi; \
-	if [ -n "$(LOGO_FILE)" ]; then \
-	  if [ -f "$(LOGO_FILE)" ]; then \
-	    cp "$(LOGO_FILE)" "_book/logo$$(echo $(LOGO_FILE) | sed 's/.*\(\.[^.]*\)$$/\1/')"; \
-	    printf "${BLUE}[INFO] Copying logo: $(LOGO_FILE)${RESET}\n"; \
-	  else \
-	    printf "${YELLOW}[WARN] Logo file $(LOGO_FILE) not found, skipping${RESET}\n"; \
-	  fi; \
-	fi; \
-	"$(UVX_BIN)" minibook \
-	  --title "$(BOOK_TITLE)" \
-	  --subtitle "$(BOOK_SUBTITLE)" \
-	  $$TEMPLATE_ARG \
-	  --links "$$(python3 -c 'import json;print(json.dumps(json.load(open("_book/links.json"))))')" \
-	  --output "_book"
-
-	@touch "_book/.nojekyll"
-	@printf "${BLUE}[INFO] Documentation book generated in _book/${RESET}\n"
+	@git branch -vv | awk '/: gone]/{print $$1}' | xargs -r git branch -D
