@@ -18,9 +18,9 @@ name: "(RHIZA) BOOK"
 
 on:
   push:
-    #branches:
-    #  - main
-    #  - master
+    branches:
+      - main
+      - master
 
 jobs:
   book:
