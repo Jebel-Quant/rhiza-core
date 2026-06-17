@@ -93,8 +93,8 @@ print-logo:
 
 
 sync: pre-sync ## sync with template repository as defined in .rhiza/template.yml
-	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(\.git)?$$'; then \
-		printf "${BLUE}[INFO] Skipping sync in rhiza repository (no template.yml by design)${RESET}\n"; \
+	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(-core|-go)?(\.git)?$$'; then \
+		printf "${BLUE}[INFO] Skipping sync in template source repository (no template.yml by design)${RESET}\n"; \
 	else \
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=$(RHIZA_VERSION)" materialize --force .; \
@@ -102,8 +102,8 @@ sync: pre-sync ## sync with template repository as defined in .rhiza/template.ym
 	@$(MAKE) post-sync
 
 summarise-sync: install-uv ## summarise differences created by sync with template repository
-	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(\.git)?$$'; then \
-		printf "${BLUE}[INFO] Skipping summarise-sync in rhiza repository (no template.yml by design)${RESET}\n"; \
+	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(-core|-go)?(\.git)?$$'; then \
+		printf "${BLUE}[INFO] Skipping summarise-sync in template source repository (no template.yml by design)${RESET}\n"; \
 	else \
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=$(RHIZA_VERSION)" summarise .; \
@@ -117,8 +117,8 @@ rhiza-test: install ## run rhiza's own tests (if any)
 	fi
 
 validate: pre-validate rhiza-test ## validate project structure against template repository as defined in .rhiza/template.yml
-	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(\.git)?$$'; then \
-		printf "${BLUE}[INFO] Skipping validate in rhiza repository (no template.yml by design)${RESET}\n"; \
+	@if git remote get-url origin 2>/dev/null | grep -iqE 'jebel-quant/rhiza(-core|-go)?(\.git)?$$'; then \
+		printf "${BLUE}[INFO] Skipping validate in template source repository (no template.yml by design)${RESET}\n"; \
 	else \
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=$(RHIZA_VERSION)" validate .; \

@@ -107,7 +107,7 @@ class TestSummariseSync:
         # Should succeed but skip the actual summarise
         assert proc.returncode == 0
         # Verify the skip message is in the output
-        assert "Skipping summarise-sync in rhiza repository" in proc.stdout
+        assert "Skipping summarise-sync in template source repository" in proc.stdout
 
     def test_summarise_sync_requires_install_uv(self, logger):
         """Summarise-sync should ensure uv is installed first."""
