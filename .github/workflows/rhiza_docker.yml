@@ -29,7 +29,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
-      - name: Detect docker/Dockerfile presence
+      - name: Detect docker/Dockerfile and uv.lock presence
         id: check_dockerfile
         run: |
           if [ -f docker/Dockerfile ]; then
@@ -37,10 +37,21 @@ jobs:
           else
             echo "docker_present=false" >> "$GITHUB_OUTPUT"
           fi
+          # The image build needs a committed uv.lock for `uv sync --frozen`.
+          # Template source repos (no uv.lock) can be linted but not built.
+          if [ -f docker/Dockerfile ] && [ -f uv.lock ]; then
+            echo "buildable=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "buildable=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Skip notice (no docker/Dockerfile present)
         if: ${{ steps.check_dockerfile.outputs.docker_present != 'true' }}
         run: echo "No docker/Dockerfile found; skipping hadolint and image build."
+
+      - name: Skip notice (no uv.lock present)
+        if: ${{ steps.check_dockerfile.outputs.docker_present == 'true' && steps.check_dockerfile.outputs.buildable != 'true' }}
+        run: echo "docker/Dockerfile present but no uv.lock; linting only, skipping image build and scan."
 
       - name: Lint Dockerfile with hadolint
         if: ${{ steps.check_dockerfile.outputs.docker_present == 'true' }}
@@ -51,11 +62,11 @@ jobs:
           # failure-threshold: error
 
       - name: Set up Docker Buildx
-        if: ${{ steps.check_dockerfile.outputs.docker_present == 'true' }}
+        if: ${{ steps.check_dockerfile.outputs.buildable == 'true' }}
         uses: docker/setup-buildx-action@v3.12.0
 
       - name: Read Python version from .python-version
-        if: ${{ steps.check_dockerfile.outputs.docker_present == 'true' }}
+        if: ${{ steps.check_dockerfile.outputs.buildable == 'true' }}
         id: python_version
         run: |
           if [ -f .python-version ]; then
@@ -69,7 +80,7 @@ jobs:
 
       - name: Build container image with Docker Buildx (validation only)
         id: docker_build
-        if: ${{ steps.check_dockerfile.outputs.docker_present == 'true' }}
+        if: ${{ steps.check_dockerfile.outputs.buildable == 'true' }}
         run: |
           # Derive image tag from repository name and sanitize (remove '.' and '_')
           REPO_NAME="${GITHUB_REPOSITORY##*/}"
@@ -84,7 +95,7 @@ jobs:
 
       - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@0.35.0
-        if: ${{ steps.check_dockerfile.outputs.docker_present == 'true' }}
+        if: ${{ steps.check_dockerfile.outputs.buildable == 'true' }}
         with:
           image-ref: '${{ steps.docker_build.outputs.image_name }}'
           format: 'sarif'
@@ -96,13 +107,13 @@ jobs:
 
       - name: Upload Trivy scan results to GitHub Security
         uses: github/codeql-action/upload-sarif@v4
-        if: always() && steps.check_dockerfile.outputs.docker_present == 'true'
+        if: always() && steps.check_dockerfile.outputs.buildable == 'true'
         with:
           sarif_file: 'trivy-results.sarif'
 
       - name: Upload Trivy scan results as artifact
         uses: actions/upload-artifact@v6.0.0
-        if: always() && steps.check_dockerfile.outputs.docker_present == 'true'
+        if: always() && steps.check_dockerfile.outputs.buildable == 'true'
         with:
           name: trivy-docker-report
           path: trivy-results.sarif
