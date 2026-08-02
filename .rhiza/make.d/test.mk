@@ -1,10 +1,10 @@
-## Makefile.tests - Testing and benchmarking targets
+## Makefile.tests - Testing targets
 # This file is included by the main Makefile.
-# It provides targets for running the test suite with coverage and
-# executing performance benchmarks.
+# It provides targets for running the test suite with coverage,
+# type checking, security scanning and documentation coverage.
 
 # Declare phony targets (they don't produce files)
-.PHONY: test benchmark typecheck security docs-coverage hypothesis-test
+.PHONY: test typecheck security docs-coverage hypothesis-test
 
 # Default directory for tests
 TESTS_FOLDER := tests
@@ -63,25 +63,6 @@ security: install ## run security scans (pip-audit and bandit)
 	@${UVX_BIN} pip-audit
 	@printf "${BLUE}[INFO] Running bandit security scan...${RESET}\n"
 	@${UVX_BIN} bandit -r ${SOURCE_FOLDER} -ll -q -c pyproject.toml
-
-# The 'benchmark' target runs performance benchmarks using pytest-benchmark.
-# 1. Installs benchmarking dependencies (pytest-benchmark, pygal).
-# 2. Executes benchmarks found in the benchmarks/ subfolder.
-# 3. Generates histograms and JSON results.
-# 4. Runs a post-analysis script to process the results.
-benchmark: install ## run performance benchmarks
-	@if [ -d "${TESTS_FOLDER}/benchmarks" ]; then \
-	  printf "${BLUE}[INFO] Running performance benchmarks...${RESET}\n"; \
-	  ${UV_BIN} pip install pytest-benchmark==5.2.3 pygal==3.1.0; \
-	  mkdir -p _tests/benchmarks; \
-	  ${UV_BIN} run pytest "${TESTS_FOLDER}/benchmarks/" \
-	  		--benchmark-only \
-			--benchmark-histogram=_tests/benchmarks/histogram \
-			--benchmark-json=_tests/benchmarks/results.json; \
-	  ${UVX_BIN} "rhiza-tools>=0.2.3" analyze-benchmarks --benchmarks-json _tests/benchmarks/results.json --output-html _tests/benchmarks/report.html; \
-	else \
-	  printf "${YELLOW}[WARN] Benchmarks folder not found, skipping benchmarks${RESET}\n"; \
-	fi
 
 # The 'docs-coverage' target checks documentation coverage using interrogate.
 # 1. Checks if SOURCE_FOLDER exists.

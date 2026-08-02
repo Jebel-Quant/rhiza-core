@@ -27,7 +27,27 @@ dev = [
     "plotly>=6.5.0,<7.0",    # Interactive visualization in notebooks (v6.5+ mature features, <7.0 for API stability)
     "pandas>=3,<3.1",        # Data manipulation for notebook examples (v3+ for modern APIs, <3.1 conservative after major release)
     "pyyaml>=6.0,<7.0",      # YAML parsing for validation scripts (v6+ for security fixes, <7.0 for API stability)
+
+    # Testing (was .rhiza/requirements/tests.txt)
+    "pytest>=8.0",           # Test runner — `uv run pytest` in test.mk
+    "pytest-cov>=6.0",       # --cov flags in test.mk (used when SOURCE_FOLDER exists)
+    "pytest-html>=4.0",      # --html report, both branches of test.mk
+    "hypothesis>=6.150.0",   # Property-based tests in tests/property/
+    "defusedxml>=0.7.0",     # Safe XML parsing in test_sbom.py
+    "python-dotenv==1.2.1",  # Imported as `dotenv` in tests; pinned per the stricter former spec
+
+    # Development tools (was .rhiza/requirements/tools.txt)
+    "ty==0.0.17",            # Type checker — `uv run ty check` in test.mk
+
+    # Documentation (was .rhiza/requirements/docs.txt)
+    "interrogate>=1.7.0",    # Docstring coverage — `uv run interrogate` in test.mk
 ]
+# Deliberately NOT declared here — these are obtained at runtime by the recipes
+# that use them, so declaring them would duplicate the version source of truth:
+#   pre-commit        uvx in quality.mk / bootstrap.mk
+#   pdoc              `uv pip install pdoc` in docs.mk
+# And these have no consumer at all: pytest-mock, typer, pytest-benchmark,
+# pygal (the last two lost theirs when the benchmark target was removed).
 
 [project.urls]
 Homepage = "https://github.com/jebel-quant/rhiza"
@@ -40,3 +60,11 @@ numpy = "numpy"
 plotly = "plotly"
 pandas = "pandas"
 pyyaml = "yaml"
+pytest = "pytest"
+pytest-cov = "pytest_cov"
+pytest-html = "pytest_html"
+hypothesis = "hypothesis"
+defusedxml = "defusedxml"
+python-dotenv = "dotenv"
+ty = "ty"
+interrogate = "interrogate"

@@ -54,16 +54,6 @@ install: pre-install install-uv ## install
 	  printf "${YELLOW}[WARN] No pyproject.toml found, skipping install${RESET}\n"; \
 	fi
 
-	# Install dev dependencies from .rhiza/requirements/*.txt files
-	@if [ -d ".rhiza/requirements" ] && ls .rhiza/requirements/*.txt >/dev/null 2>&1; then \
-	  for req_file in .rhiza/requirements/*.txt; do \
-	    if [ -f "$$req_file" ]; then \
-	      printf "${BLUE}[INFO] Installing requirements from $$req_file${RESET}\n"; \
-	      ${UV_BIN} pip install -r "$$req_file" || { printf "${RED}[ERROR] Failed to install requirements from $$req_file${RESET}\n"; exit 1; }; \
-	    fi; \
-	  done; \
-	fi
-
 	# Check if there is requirements.txt file in the tests folder (legacy support)
 	@if [ -f "tests/requirements.txt" ]; then \
 	  printf "${BLUE}[INFO] Installing requirements from tests/requirements.txt${RESET}\n"; \
