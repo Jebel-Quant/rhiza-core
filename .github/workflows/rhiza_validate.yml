@@ -31,7 +31,9 @@ jobs:
 
       - name: Validate Rhiza config
         # don't run this in rhiza itself. Rhiza has no template.yml file.
-        if: ${{ github.repository != 'jebel-quant/rhiza' }}
+        # contains() is case-insensitive, so this holds whatever case
+        # github.repository reports the owner in.
+        if: ${{ !contains(fromJSON('["jebel-quant/rhiza", "jebel-quant/rhiza-core"]'), github.repository) }}
         shell: bash
         run: |
           uvx "rhiza>=0.8.0" validate .
