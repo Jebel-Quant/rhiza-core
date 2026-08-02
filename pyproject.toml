@@ -29,25 +29,26 @@ dev = [
     "pyyaml>=6.0,<7.0",      # YAML parsing for validation scripts (v6+ for security fixes, <7.0 for API stability)
 
     # Testing (was .rhiza/requirements/tests.txt)
-    "pytest>=8.0",           # Test runner
-    "pytest-cov>=6.0",       # Coverage reporting
-    "pytest-html>=4.0",      # HTML test reports
-    "pytest-mock>=3.0",      # Mocking fixtures
-    "pytest-benchmark>=5.2.3",  # Benchmark harness for tests/benchmarks
-    "hypothesis>=6.150.0",   # Property-based testing
-    "pygal>=3.1.0",          # Charts for benchmark output
-    "defusedxml>=0.7.0",     # Safe XML parsing in tests
-    "python-dotenv==1.2.1",  # Env loading; pinned per the stricter of the two former specs
+    "pytest>=8.0",           # Test runner — `uv run pytest` in test.mk
+    "pytest-cov>=6.0",       # --cov flags in test.mk (used when SOURCE_FOLDER exists)
+    "pytest-html>=4.0",      # --html report, both branches of test.mk
+    "hypothesis>=6.150.0",   # Property-based tests in tests/property/
+    "defusedxml>=0.7.0",     # Safe XML parsing in test_sbom.py
+    "python-dotenv==1.2.1",  # Imported as `dotenv` in tests; pinned per the stricter former spec
 
     # Development tools (was .rhiza/requirements/tools.txt)
-    "pre-commit==4.5.1",     # Hook runner
-    "typer==0.21.1",         # CLI framework; temporary until rhiza-tools is finished
-    "ty==0.0.17",            # Type checker
+    "ty==0.0.17",            # Type checker — `uv run ty check` in test.mk
 
     # Documentation (was .rhiza/requirements/docs.txt)
-    "pdoc>=16.0.0",          # API documentation generation
-    "interrogate>=1.7.0",    # Docstring coverage
+    "interrogate>=1.7.0",    # Docstring coverage — `uv run interrogate` in test.mk
 ]
+# Deliberately NOT declared here — these are obtained at runtime by the recipes
+# that use them, so declaring them would duplicate the version source of truth:
+#   pre-commit        uvx in quality.mk / bootstrap.mk
+#   pdoc              `uv pip install pdoc` in docs.mk
+#   pytest-benchmark  `uv pip install pytest-benchmark==5.2.3` in test.mk
+#   pygal             `uv pip install pygal==3.1.0` in test.mk
+# And these have no consumer at all: pytest-mock, typer.
 
 [project.urls]
 Homepage = "https://github.com/jebel-quant/rhiza"
@@ -63,14 +64,8 @@ pyyaml = "yaml"
 pytest = "pytest"
 pytest-cov = "pytest_cov"
 pytest-html = "pytest_html"
-pytest-mock = "pytest_mock"
-pytest-benchmark = "pytest_benchmark"
 hypothesis = "hypothesis"
-pygal = "pygal"
 defusedxml = "defusedxml"
 python-dotenv = "dotenv"
-pre-commit = "pre_commit"
-typer = "typer"
 ty = "ty"
-pdoc = "pdoc"
 interrogate = "interrogate"
