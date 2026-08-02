@@ -27,6 +27,26 @@ dev = [
     "plotly>=6.5.0,<7.0",    # Interactive visualization in notebooks (v6.5+ mature features, <7.0 for API stability)
     "pandas>=3,<3.1",        # Data manipulation for notebook examples (v3+ for modern APIs, <3.1 conservative after major release)
     "pyyaml>=6.0,<7.0",      # YAML parsing for validation scripts (v6+ for security fixes, <7.0 for API stability)
+
+    # Testing (was .rhiza/requirements/tests.txt)
+    "pytest>=8.0",           # Test runner
+    "pytest-cov>=6.0",       # Coverage reporting
+    "pytest-html>=4.0",      # HTML test reports
+    "pytest-mock>=3.0",      # Mocking fixtures
+    "pytest-benchmark>=5.2.3",  # Benchmark harness for tests/benchmarks
+    "hypothesis>=6.150.0",   # Property-based testing
+    "pygal>=3.1.0",          # Charts for benchmark output
+    "defusedxml>=0.7.0",     # Safe XML parsing in tests
+    "python-dotenv==1.2.1",  # Env loading; pinned per the stricter of the two former specs
+
+    # Development tools (was .rhiza/requirements/tools.txt)
+    "pre-commit==4.5.1",     # Hook runner
+    "typer==0.21.1",         # CLI framework; temporary until rhiza-tools is finished
+    "ty==0.0.17",            # Type checker
+
+    # Documentation (was .rhiza/requirements/docs.txt)
+    "pdoc>=16.0.0",          # API documentation generation
+    "interrogate>=1.7.0",    # Docstring coverage
 ]
 
 [project.urls]
@@ -40,3 +60,17 @@ numpy = "numpy"
 plotly = "plotly"
 pandas = "pandas"
 pyyaml = "yaml"
+pytest = "pytest"
+pytest-cov = "pytest_cov"
+pytest-html = "pytest_html"
+pytest-mock = "pytest_mock"
+pytest-benchmark = "pytest_benchmark"
+hypothesis = "hypothesis"
+pygal = "pygal"
+defusedxml = "defusedxml"
+python-dotenv = "dotenv"
+pre-commit = "pre_commit"
+typer = "typer"
+ty = "ty"
+pdoc = "pdoc"
+interrogate = "interrogate"

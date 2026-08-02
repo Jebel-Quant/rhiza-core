@@ -47,9 +47,6 @@ bundles:
       - .rhiza/make.d/README.md
       - .rhiza/scripts
       - .rhiza/assets
-      - .rhiza/requirements/README.md
-      - .rhiza/requirements/docs.txt
-      - .rhiza/requirements/tools.txt
 
       # Root configuration files
       - Makefile
@@ -175,7 +172,6 @@ bundles:
     files:
       # Make targets and configuration
       - .rhiza/make.d/test.mk
-      - .rhiza/requirements/tests.txt
       - pytest.ini
 
       # Core/generic test files
@@ -200,7 +196,6 @@ bundles:
     files:
       # Marimo configuration
       - .rhiza/make.d/marimo.mk
-      - .rhiza/requirements/marimo.txt
 
       # Marimo notebooks directory
       - book/marimo
