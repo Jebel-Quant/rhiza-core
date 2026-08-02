@@ -252,11 +252,6 @@ m te<TAB>  # Expands to: m test
 - For large Makefiles (100+ targets), there may be a small delay
 - Results are not cached to ensure targets are always current
 
-## See Also
-
-- [Tools Reference](../../docs/TOOLS_REFERENCE.md) - Complete command reference
-- [Extending Rhiza](../../docs/EXTENDING_RHIZA.md) - How to add custom targets
-
 ---
 
 *Last updated: 2026-02-15*

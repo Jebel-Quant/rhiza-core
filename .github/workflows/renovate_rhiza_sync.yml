@@ -30,7 +30,6 @@ jobs:
           if [ -z "$PAT_TOKEN" ]; then
             echo "::warning::PAT_TOKEN secret is not configured."
             echo "::warning::If this sync modifies workflow files, the push will fail."
-            echo "::warning::See .rhiza/docs/TOKEN_SETUP.md for setup instructions."
           else
             echo "✓ PAT_TOKEN is configured."
           fi

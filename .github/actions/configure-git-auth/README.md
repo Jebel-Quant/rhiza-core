@@ -74,7 +74,3 @@ jobs:
         run: uv run pytest
 ```
 
-## See Also
-
-- [PRIVATE_PACKAGES.md](../../../.rhiza/docs/PRIVATE_PACKAGES.md) - Complete guide to using private packages
-- [TOKEN_SETUP.md](../../../.rhiza/docs/TOKEN_SETUP.md) - Setting up Personal Access Tokens
