@@ -25,11 +25,6 @@ class TestLFSTemplateStructure:
         """LFS makefile should exist in make.d directory."""
         assert lfs_makefile.exists()
 
-    def test_lfs_documentation_exists(self, root, lfs_makefile):
-        """LFS documentation should exist."""
-        lfs_doc = root / ".rhiza" / "docs" / "LFS.md"
-        assert lfs_doc.exists(), "LFS.md documentation not found"
-
     def test_lfs_makefile_has_targets(self, lfs_makefile):
         """LFS makefile should define all expected targets."""
         content = lfs_makefile.read_text()
@@ -63,45 +58,6 @@ class TestLFSTemplateStructure:
 
         # Check for target descriptions
         assert "##" in content
-
-    def test_lfs_documentation_has_sections(self, root, lfs_makefile):
-        """LFS documentation should have all expected sections."""
-        lfs_doc = root / ".rhiza" / "docs" / "LFS.md"
-        # Since test_lfs_documentation_exists checks existence, we assume it exists if passed
-        if not lfs_doc.exists():
-            pytest.skip("LFS.md not found")
-
-        content = lfs_doc.read_text()
-
-        expected_sections = [
-            "# Git LFS",
-            "## Overview",
-            "## Available Make Targets",
-            "## Typical Workflow",
-            "## CI/CD Integration",
-            "## Troubleshooting",
-        ]
-
-        for section in expected_sections:
-            assert section in content, f"Section '{section}' not found in LFS.md"
-
-    def test_lfs_documentation_describes_all_targets(self, root, lfs_makefile):
-        """LFS documentation should describe all make targets."""
-        lfs_doc = root / ".rhiza" / "docs" / "LFS.md"
-        if not lfs_doc.exists():
-            pytest.skip("LFS.md not found")
-
-        content = lfs_doc.read_text()
-
-        targets = [
-            "lfs-install",
-            "lfs-pull",
-            "lfs-track",
-            "lfs-status",
-        ]
-
-        for target in targets:
-            assert target in content, f"Target {target} not documented in LFS.md"
 
     def test_lfs_makefile_cross_platform_support(self, lfs_makefile):
         """LFS makefile should support multiple platforms."""

@@ -67,25 +67,9 @@ See [requirements/README.md](requirements/README.md) for details.
 
 See [tests/README.md](tests/README.md) for details.
 
-## 📚 Documentation (`.rhiza/docs/`)
-
-| File | Purpose |
-|------|---------|
-| `ASSETS.md` | Asset management documentation |
-| `CONFIG.md` | Configuration file documentation |
-| `LFS.md` | Git LFS setup and usage |
-| `PRIVATE_PACKAGES.md` | Private package authentication |
-| `RELEASING.md` | Release process documentation |
-| `TOKEN_SETUP.md` | GitHub token setup |
-| `WORKFLOWS.md` | GitHub Actions workflows |
-
 ## 🎨 Assets (`.rhiza/assets/`)
 
 - `rhiza-logo.svg` - Rhiza logo graphic
-
-## 📋 Templates (`.rhiza/templates/`)
-
-- `minibook/` - Minimal documentation book template
 
 ## 🔌 Template Bundles
 

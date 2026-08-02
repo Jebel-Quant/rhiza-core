@@ -124,7 +124,7 @@ The Copilot coding agent environment is automatically configured via official Gi
 
 These files must exist on the default branch. The agent does not need to run any setup commands manually.
 
-For DevContainers and Codespaces, the `.devcontainer/` configuration and `bootstrap.sh` handle setup automatically. See `docs/DEVCONTAINER.md` for details.
+For DevContainers and Codespaces, the `.devcontainer/` configuration and `bootstrap.sh` handle setup automatically.
 
 ## Project Structure
 

@@ -46,7 +46,6 @@ bundles:
       - .rhiza/make.d/releasing.mk
       - .rhiza/make.d/README.md
       - .rhiza/scripts
-      - .rhiza/docs
       - .rhiza/assets
       - .rhiza/requirements/README.md
       - .rhiza/requirements/docs.txt
@@ -119,8 +118,6 @@ bundles:
       - .devcontainer/devcontainer.json
       - .devcontainer/bootstrap.sh
 
-      # Documentation
-      - docs/DEVCONTAINER.md
 
       # GitHub Actions workflows
       - .github/workflows/rhiza_devcontainer.yml
@@ -140,8 +137,6 @@ bundles:
       # Make targets
       - .rhiza/make.d/docker.mk
 
-      # Documentation
-      - docs/DOCKER.md
 
       # GitHub Actions workflows
       - .github/workflows/rhiza_docker.yml
@@ -157,8 +152,6 @@ bundles:
       # Make targets for LFS
       - .rhiza/make.d/lfs.mk
 
-      # Documentation
-      - .rhiza/docs/LFS.md
 
   # ============================================================================
   # PRESENTATION - Presentation building with reveal.js
