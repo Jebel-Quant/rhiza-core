@@ -322,8 +322,6 @@ Docker
 
 Agentic Workflows
   copilot               open interactive prompt for copilot
-  analyse-repo          run the analyser agent to update REPOSITORY_ANALYSIS.md
-  summarise-changes     summarise changes since the most recent release/tag
   install-copilot       checks for copilot and prompts to install
 
 GitHub Helpers

@@ -85,9 +85,7 @@ tutorial: ## interactive tutorial with guided walkthrough of key features
 	@printf "\n${BOLD}🤖 Lesson 10: AI-Powered Workflows${RESET}\n"
 	@printf "Rhiza includes AI-assisted development tools:\n\n"
 	@printf "${GREEN}  make copilot${RESET}          - Open GitHub Copilot CLI\n"
-	@printf "${GREEN}  make claude${RESET}           - Open Claude Code interactive prompt\n"
-	@printf "${GREEN}  make analyse-repo${RESET}     - AI analysis of repository structure\n"
-	@printf "${GREEN}  make summarise-changes${RESET} - Summarize changes since last release\n\n"
+	@printf "${GREEN}  make claude${RESET}           - Open Claude Code interactive prompt\n\n"
 	@printf "${YELLOW}Press Enter to continue...${RESET}\n" && read -r
 	@printf "\n${BOLD}✨ Tutorial Complete!${RESET}\n\n"
 	@printf "You've learned the essentials of working with Rhiza.\n\n"

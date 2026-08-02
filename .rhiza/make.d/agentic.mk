@@ -2,7 +2,7 @@
 # This file is included by the main Makefile
 
 # Declare phony targets
-.PHONY: install-copilot install-claude analyse-repo summarise-changes
+.PHONY: install-copilot install-claude
 
 COPILOT_BIN ?= $(shell command -v copilot 2>/dev/null || echo "$(INSTALL_DIR)/copilot")
 CLAUDE_BIN ?= $(shell command -v claude 2>/dev/null || echo "$(HOME)/.local/bin/claude")
@@ -15,16 +15,6 @@ copilot: install-copilot ## open interactive prompt for copilot
 
 claude: install-claude ## open interactive prompt for claude code
 	@"$(CLAUDE_BIN)"
-
-analyse-repo: install-copilot ## run the analyser agent to update REPOSITORY_ANALYSIS.md
-	@"$(COPILOT_BIN)" --agent analyser \
-		--model "$(DEFAULT_AI_MODEL)" \
-		--prompt "Analyze the repository and update the journal." \
-		--allow-tool 'write' --deny-tool 'remove' \
-		--allow-all-paths
-
-summarise-changes: install-copilot ## summarise changes since the most recent release/tag
-	@"$(COPILOT_BIN)" -p "Show me the commits since the last release/tag and summarise them" --allow-tool 'shell(git)' --model "$(DEFAULT_AI_MODEL)" --agent summarise
 
 install-copilot:  ## checks for copilot and prompts to install
 	@if command -v copilot >/dev/null 2>&1; then \

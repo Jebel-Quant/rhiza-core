@@ -103,7 +103,6 @@ Defined in `template-bundles.yml`:
 ### AI Agents
 - `make copilot` - GitHub Copilot interactive prompt
 - `make claude` - Claude Code interactive prompt
-- `make analyse-repo` - Update REPOSITORY_ANALYSIS.md
 
 ### Documentation
 - `make book` - Build documentation book

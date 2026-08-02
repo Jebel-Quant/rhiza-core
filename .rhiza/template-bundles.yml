@@ -76,7 +76,6 @@ bundles:
       - .github/actions/configure-git-auth
       - .github/dependabot.yml
       - .github/copilot-instructions.md
-      - .github/agents
       - .github/hooks
 
   # ============================================================================
