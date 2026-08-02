@@ -147,8 +147,5 @@ Defined in `template-bundles.yml`:
 
 ## 🔗 Related Documentation
 
-- [Architecture Diagrams & Naming Conventions](../docs/ARCHITECTURE.md) - Visual architecture overview and detailed naming conventions
 - [Makefile Cookbook](make.d/README.md) - Common patterns and recipes
 - [Test Suite Guide](tests/README.md) - Testing conventions
-- [Customization Guide](../docs/CUSTOMIZATION.md) - How to customize Rhiza
-- [Quick Reference](../docs/QUICK_REFERENCE.md) - Common commands
