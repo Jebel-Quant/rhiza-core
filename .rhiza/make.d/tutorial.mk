@@ -50,7 +50,7 @@ tutorial: ## interactive tutorial with guided walkthrough of key features
 	@printf "   ${GREEN}post-install::\n"
 	@printf "   	@echo 'Additional setup'${RESET}\n\n"
 	@printf "3. ${BOLD}Create local overrides${RESET} in local.mk (not committed)\n\n"
-	@printf "${YELLOW}See docs/CUSTOMIZATION.md and docs/EXTENDING_RHIZA.md for details.${RESET}\n"
+	@printf "${YELLOW}See docs/EXTENDING_RHIZA.md for details.${RESET}\n"
 	@printf "${YELLOW}Press Enter to continue...${RESET}\n" && read -r
 	@printf "\n${BOLD}🧪 Lesson 6: Development Workflow${RESET}\n"
 	@printf "Typical development cycle:\n\n"
@@ -95,7 +95,6 @@ tutorial: ## interactive tutorial with guided walkthrough of key features
 	@printf "${BOLD}Next steps:${RESET}\n"
 	@printf "  • Read ${GREEN}docs/TOOLS_REFERENCE.md${RESET} for command quick reference\n"
 	@printf "  • Read ${GREEN}docs/EXTENDING_RHIZA.md${RESET} for customization patterns\n"
-	@printf "  • Read ${GREEN}docs/CUSTOMIZATION.md${RESET} for advanced topics\n"
 	@printf "  • Try ${GREEN}make help${RESET} to see all available commands\n"
 	@printf "  • Check ${GREEN}README.md${RESET} for project-specific information\n\n"
 	@printf "${BLUE}Happy coding with Rhiza! 🌱${RESET}\n\n"

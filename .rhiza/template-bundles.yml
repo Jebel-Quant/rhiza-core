@@ -60,13 +60,6 @@ bundles:
       - .python-version
       - ruff.toml
 
-      # Documentation files (user-facing docs)
-      - docs/SECURITY.md
-      - docs/ARCHITECTURE.md
-      - docs/CUSTOMIZATION.md
-      - docs/GLOSSARY.md
-      - docs/QUICK_REFERENCE.md
-      - docs/DEMO.md
 
   github:
     description: "GitHub Actions workflows for CI/CD"
@@ -178,7 +171,6 @@ bundles:
       - marimo  # Presentations often use Marimo for interactive slides
     files:
       - .rhiza/make.d/presentation.mk
-      - docs/PRESENTATION.md
 
   # ============================================================================
   # TESTS - Testing infrastructure with pytest, coverage, and type checking
@@ -198,7 +190,6 @@ bundles:
 
       # Benchmark and stress test infrastructure
       - tests/benchmarks
-      - docs/TESTS.md
 
       # GitHub Actions workflows
       - .github/workflows/rhiza_ci.yml
@@ -222,7 +213,6 @@ bundles:
       - book/marimo
 
       # Documentation
-      - docs/MARIMO.md
 
       # GitHub Actions workflows
       - .github/workflows/rhiza_marimo.yml
@@ -247,7 +237,6 @@ bundles:
       - .rhiza/make.d/book.mk
 
       # Documentation
-      - docs/BOOK.md
 
       # GitHub Actions workflows
       - .github/workflows/rhiza_book.yml

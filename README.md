@@ -404,10 +404,6 @@ Rhiza uses a modular Makefile system with extension points (hooks) for customisa
 - Custom target creation
 - Module ordering conventions
 
-### Custom Build Scripts
-
-For system dependencies and custom build steps, see [docs/CUSTOMIZATION.md](docs/CUSTOMIZATION.md).
-
 ### Private GitHub Packages
 
 Rhiza's template workflows automatically support private GitHub packages from the same organization. Simply add them to your `pyproject.toml`:
@@ -430,7 +426,6 @@ For information on versioning, tagging, and publishing releases, see [.rhiza/doc
 
 This repository includes a template Dev Container configuration for seamless development in VS Code and GitHub Codespaces. See [.devcontainer/README.md](.devcontainer/README.md) for setup, configuration, and troubleshooting.
 
-For details about the VS Code extensions configured in the Dev Container, see [docs/VSCODE_EXTENSIONS.md](docs/VSCODE_EXTENSIONS.md).
 
 ## 🔄 CI/CD Support
 

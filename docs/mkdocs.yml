@@ -60,12 +60,4 @@ markdown_extensions:
 # Navigation structure
 nav:
   - Home: index.md
-  - Architecture: ARCHITECTURE.md
-  - Quick Reference: QUICK_REFERENCE.md
-  - Customization: CUSTOMIZATION.md
-  - Dependencies: DEPENDENCIES.md
-  - Demo: DEMO.md
-  - Glossary: GLOSSARY.md
-  - Releasing: RELEASING.md
-  - VSCode Extensions: VSCODE_EXTENSIONS.md
 

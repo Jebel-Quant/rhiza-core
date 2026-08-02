@@ -6,8 +6,6 @@ This guide covers recommended day-to-day development workflows for Rhiza project
 
 Rhiza uses [uv](https://docs.astral.sh/uv/) for fast, reliable Python dependency management.
 
-> 📚 **For detailed information about dependency version constraints and rationale**, see [docs/DEPENDENCIES.md](../../docs/DEPENDENCIES.md)
-
 ### Adding Dependencies
 
 **Recommended: Use `uv add`** — handles everything in one step:

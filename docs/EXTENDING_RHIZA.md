@@ -905,9 +905,7 @@ endif
 
 ## See Also
 
-- [Quick Reference](QUICK_REFERENCE.md) - Command quick reference
 - [Tools Reference](TOOLS_REFERENCE.md) - Comprehensive tool documentation
-- [Customization Guide](CUSTOMIZATION.md) - Basic customization
 - [Makefile Cookbook](.rhiza/make.d/README.md) - Make recipes
 
 ---
