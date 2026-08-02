@@ -129,7 +129,7 @@ make install
 
 ### Core Features
 
-- 🚀 **CI/CD Templates** - Ready-to-use GitHub Actions and GitLab CI workflows
+- 🚀 **CI/CD Templates** - Ready-to-use GitHub Actions workflows
 - 🧪 **Testing Framework** - Comprehensive test setup with pytest
 - 📚 **Documentation** - Automated documentation generation with pdoc and companion books
 - 🔍 **Code Quality** - Linting with ruff, formatting, and dependency checking with deptry
@@ -158,7 +158,6 @@ This repository provides a curated set of reusable configuration templates:
 
 #### 🚀 CI/CD & Automation
 - **.github/** - GitHub Actions workflows, scripts, and repository templates
-- **.gitlab/** - GitLab CI/CD workflows (see [.gitlab/README.md](.gitlab/README.md))
 
 ## 🧩 Integration Guide
 
@@ -445,18 +444,6 @@ The `.github/` directory contains comprehensive GitHub Actions workflows for:
 - Docker and devcontainer validation
 - Release automation
 - Template synchronization
-
-### GitLab CI/CD
-
-Rhiza provides GitLab CI/CD workflow configurations with feature parity to GitHub Actions. The `.gitlab/` directory includes workflows for CI, validation, dependency checking, documentation, sync, and releases.
-
-**Quick setup:**
-```bash
-cp -r .gitlab/ /path/to/your/project/
-cp .gitlab-ci.yml /path/to/your/project/
-```
-
-For complete GitLab setup instructions, configuration variables, and troubleshooting, see **[.gitlab/README.md](.gitlab/README.md)**.
 
 ## 🛠️ Contributing to Rhiza
 
