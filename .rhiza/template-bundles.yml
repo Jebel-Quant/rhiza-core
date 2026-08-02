@@ -74,7 +74,6 @@ bundles:
       - .github/dependabot.yml
       - .github/copilot-instructions.md
       - .github/agents
-      - .github/hooks
 
   # ============================================================================
   # RENOVATE - Automated dependency updates
