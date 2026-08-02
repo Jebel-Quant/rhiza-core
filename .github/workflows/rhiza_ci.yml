@@ -24,7 +24,7 @@ jobs:
     outputs:
       matrix: ${{ steps.versions.outputs.list }}
     steps:
-      - uses: actions/checkout@v6.1.0
+      - uses: actions/checkout@v7.0.1
         with:
           lfs: true
 
@@ -60,7 +60,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.1.0
+        uses: actions/checkout@v7.0.1
         with:
           lfs: true
 
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.1.0
+        uses: actions/checkout@v7.0.1
 
       - name: Install uv
         uses: astral-sh/setup-uv@v9.0.0
