@@ -101,7 +101,6 @@ Defined in `template-bundles.yml`:
 | `docker` | Docker containerization | Dockerfile |
 | `lfs` | Git LFS support | Large files |
 | `presentation` | Presentation building | reveal.js |
-| `gitlab` | GitLab CI/CD | GitLab workflows |
 | `devcontainer` | VS Code DevContainer | Dev environment |
 | `legal` | Legal documentation | LICENSE, CODE_OF_CONDUCT |
 
