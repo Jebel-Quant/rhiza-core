@@ -190,11 +190,6 @@ bundles:
       # Marimo configuration
       - .rhiza/make.d/marimo.mk
 
-      # Marimo notebooks directory
-      - book/marimo
-
-      # Documentation
-
       # GitHub Actions workflows
       - .github/workflows/rhiza_marimo.yml
 
