@@ -10,7 +10,6 @@ Tests are organized into purpose-driven subdirectories:
 Static assertions about file and directory presence. These tests verify that the repository contains the expected files, directories, and configuration structure without executing any subprocesses.
 
 - `test_project_layout.py` — Validates root-level files and directories
-- `test_requirements.py` — Validates `.rhiza/requirements/` structure
 
 ### `api/`
 Makefile target validation via dry-runs. These tests verify that Makefile targets are properly defined and would execute the expected commands.
@@ -42,7 +41,7 @@ Tests for utility code and test infrastructure. These tests validate the testing
 ### `deps/`
 Dependency validation tests. These tests ensure that project dependencies are correctly specified and healthy.
 
-- `test_dependency_health.py` — Validates pyproject.toml and requirements files
+- `test_dependency_health.py` — Validates pyproject.toml
 
 ## Running Tests
 
@@ -121,6 +120,5 @@ The test suite aims for high coverage across:
 
 ## Notes
 
-- Benchmarks are located in `tests/benchmarks/` and run via `make benchmark`
 - Integration tests use sandboxed git repositories to avoid affecting the working tree
 - All Makefile tests use dry-run mode (`make -n`) to avoid side effects

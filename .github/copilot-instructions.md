@@ -118,11 +118,8 @@ post-install::
 The Copilot coding agent environment is automatically configured via official GitHub mechanisms:
 
 - **`.github/workflows/copilot-setup-steps.yml`**: Runs before the agent starts. Installs uv, configures git auth for private packages, and runs `make install` to set up a deterministic environment.
-- **`.github/hooks/hooks.json`**: Defines session lifecycle hooks:
-  - `sessionStart`: Validates the environment is correctly set up (uv available, .venv exists)
-  - `sessionEnd`: Runs `make fmt` and `make test` as quality gates after the agent finishes work
 
-These files must exist on the default branch. The agent does not need to run any setup commands manually.
+This file must exist on the default branch. The agent does not need to run any setup commands manually.
 
 For DevContainers and Codespaces, the `.devcontainer/` configuration and `bootstrap.sh` handle setup automatically.
 
@@ -157,4 +154,3 @@ For DevContainers and Codespaces, the `.devcontainer/` configuration and `bootst
 - `pyproject.toml`: Project configuration and dependencies.
 - `.devcontainer/bootstrap.sh`: Bootstrap script for dev containers.
 - `.github/workflows/copilot-setup-steps.yml`: Agent environment setup (runs before agent starts).
-- `.github/hooks/hooks.json`: Agent session hooks (quality gates).
