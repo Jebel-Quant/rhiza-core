@@ -141,7 +141,7 @@ jobs:
 
       - name: Install Python for SBOM generation
         if: hashFiles('pyproject.toml') != ''
-        uses: actions/setup-python@v6.3.0
+        uses: actions/setup-python@v7.0.0
         with:
           python-version-file: .python-version
 
@@ -291,7 +291,7 @@ jobs:
           uv sync --all-extras --all-groups --frozen
 
       - name: Set up Python
-        uses: actions/setup-python@v6.3.0
+        uses: actions/setup-python@v7.0.0
 
       - name: Generate PyPI Link
         id: pypi_link
