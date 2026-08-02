@@ -3,7 +3,7 @@
 #
 # Configuration: Dependabot
 #
-# Purpose: Automate dependency updates for Python packages, GitHub Actions, and Docker images.
+# Purpose: Automate dependency updates for Python packages and GitHub Actions.
 #
 # Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
@@ -62,19 +62,3 @@ updates:
     commit-message:
       prefix: "chore(deps)"
       include: "scope"
-
-  # Docker
-  #- package-ecosystem: "docker"
-  #  directory: "/docker"
-  #  schedule:
-  #    interval: "weekly"
-  #    day: "tuesday"
-  #    time: "09:00"
-  #    timezone: "Asia/Dubai"
-  #  open-pull-requests-limit: 10
-  #  labels:
-  #    - "dependencies"
-  #    - "docker"
-  #  commit-message:
-  #    prefix: "chore(deps)"
-  #    include: "scope"

@@ -105,7 +105,7 @@ make te<TAB>  # Expands to: make test
 make BUMP=<TAB>  # Shows: patch, minor, major
 
 # Works with any target
-make doc<TAB>  # Shows: docs, docker-build, docker-run, etc.
+make doc<TAB>  # Shows: docs, docs-coverage, etc.
 ```
 
 ### Zsh Benefits

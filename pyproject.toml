@@ -22,10 +22,6 @@ dependencies = []
 
 [dependency-groups]
 dev = [
-    "marimo>=0.18.0,<1.0",   # Reactive notebook runtime for book/ examples (v0.18+ for streaming, <1.0 for API stability)
-    "numpy>=2.4.0,<3.0",     # Numerical computing for notebook data analysis (v2.4+ includes 2.0 improvements, <3.0 avoids breaking changes)
-    "plotly>=6.5.0,<7.0",    # Interactive visualization in notebooks (v6.5+ mature features, <7.0 for API stability)
-    "pandas>=3,<3.1",        # Data manipulation for notebook examples (v3+ for modern APIs, <3.1 conservative after major release)
     "pyyaml>=6.0,<7.0",      # YAML parsing for validation scripts (v6+ for security fixes, <7.0 for API stability)
 
     # Testing (was .rhiza/requirements/tests.txt)
@@ -47,7 +43,9 @@ dev = [
 #   pre-commit        uvx in quality.mk / bootstrap.mk
 #   pdoc              `uv pip install pdoc` in docs.mk
 # And these have no consumer at all: pytest-mock, typer, pytest-benchmark,
-# pygal (the last two lost theirs when the benchmark target was removed).
+# pygal (the last two lost theirs when the benchmark target was removed), and
+# marimo/numpy/plotly/pandas (which lost theirs when the marimo and book
+# subsystems were removed).
 
 [project.urls]
 Homepage = "https://github.com/jebel-quant/rhiza"
@@ -55,10 +53,6 @@ Repository = "https://github.com/jebel-quant/rhiza"
 Issues = "https://github.com/jebel-quant/rhiza/issues"
 
 [tool.deptry.package_module_name_map]
-marimo = "marimo"
-numpy = "numpy"
-plotly = "plotly"
-pandas = "pandas"
 pyyaml = "yaml"
 pytest = "pytest"
 pytest-cov = "pytest_cov"

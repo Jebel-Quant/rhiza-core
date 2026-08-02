@@ -195,11 +195,6 @@ def git_repo(root, tmp_path, monkeypatch):
         make_d_dst = local_dir / ".rhiza" / "make.d"
         shutil.copytree(make_d_src, make_d_dst, dirs_exist_ok=True)
 
-    book_src = root / "book"
-    book_dst = local_dir / "book"
-    if book_src.is_dir():
-        shutil.copytree(book_src, book_dst, dirs_exist_ok=True)
-
     # Commit and push initial state
     subprocess.run([GIT, "config", "user.email", "test@example.com"], check=True)  # nosec B603
     subprocess.run([GIT, "config", "user.name", "Test User"], check=True)  # nosec B603

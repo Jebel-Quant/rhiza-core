@@ -30,12 +30,8 @@ SPLIT_MAKEFILES = [
     ".rhiza/make.d/quality.mk",
     ".rhiza/make.d/releasing.mk",
     ".rhiza/make.d/test.mk",
-    ".rhiza/make.d/book.mk",
-    ".rhiza/make.d/marimo.mk",
-    ".rhiza/make.d/presentation.mk",
     ".rhiza/make.d/github.mk",
     ".rhiza/make.d/agentic.mk",
-    ".rhiza/make.d/docker.mk",
     ".rhiza/make.d/docs.mk",
 ]
 

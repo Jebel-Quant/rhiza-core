@@ -1,44 +1,39 @@
 # Rhiza Index
 
+> **Retired.** `rhiza-core` is no longer maintained — see [`jebel-quant/rhiza`](https://github.com/jebel-quant/rhiza).
+
 Quick reference to all utilities, makefiles, and resources in the `.rhiza/` directory.
 
 ## 📁 Directory Structure
 
 ```
 .rhiza/
-├── rhiza.mk              # Core makefile logic (153 lines)
+├── rhiza.mk              # Core makefile logic
 ├── .rhiza-version        # Current Rhiza version
 ├── .cfg.toml             # Configuration file
 ├── .env                  # Environment variables
 ├── template-bundles.yml  # Template bundle definitions
 ├── make.d/               # Makefile extensions (auto-loaded)
-├── scripts/              # Shell scripts and utilities
-├── templates/            # Project templates
+├── completions/          # Shell completion scripts
 ├── tests/                # Test suite
-├── docs/                 # Internal documentation
 └── assets/               # Static assets
 ```
 
 ## 🔧 Makefiles (`.rhiza/make.d/`)
 
-| File | Size | Purpose | Section |
-|------|------|---------|---------|
-| `agentic.mk` | 3.1K | AI agent integrations (copilot, claude) | Agentic Workflows |
-| `book.mk` | 4.7K | Documentation book generation | Book |
-| `bootstrap.mk` | 4.3K | Installation and environment setup | Bootstrap |
-| `custom-env.mk` | 290B | Example environment customizations | - |
-| `custom-task.mk` | 423B | Example custom tasks | Custom Tasks |
-| `docker.mk` | 1.1K | Docker build and run targets | Docker |
-| `docs.mk` | 3.9K | Documentation generation (pdoc) | Documentation |
-| `github.mk` | 6.0K | GitHub CLI integrations | GitHub Helpers |
-| `lfs.mk` | 3.0K | Git LFS management | Git LFS |
-| `marimo.mk` | 2.9K | Marimo notebook support | Marimo Notebooks |
-| `presentation.mk` | 3.3K | Presentation building (Marp) | Presentation |
-| `quality.mk` | 860B | Code quality and formatting | Quality and Formatting |
-| `releasing.mk` | 2.0K | Release and versioning | Releasing and Versioning |
-| `test.mk` | 5.1K | Testing infrastructure | Development and Testing |
+| File | Purpose | Section |
+|------|---------|---------|
+| `agentic.mk` | AI agent integrations (copilot, claude) | Agentic Workflows |
+| `bootstrap.mk` | Installation and environment setup | Bootstrap |
+| `custom-env.mk` | Example environment customizations | - |
+| `custom-task.mk` | Example custom tasks | Custom Tasks |
+| `docs.mk` | Documentation generation (pdoc, MkDocs) | Documentation |
+| `github.mk` | GitHub CLI integrations | GitHub Helpers |
+| `quality.mk` | Code quality and formatting | Quality and Formatting |
+| `releasing.mk` | Release and versioning | Releasing and Versioning |
+| `test.mk` | Testing infrastructure | Development and Testing |
 
-**Total**: 14 makefiles, ~41KB
+**Total**: 9 makefiles
 
 ## 🧪 Test Suite (`.rhiza/tests/`)
 
@@ -50,8 +45,6 @@ Quick reference to all utilities, makefiles, and resources in the `.rhiza/` dire
 | `structure/` | Static project structure assertions |
 | `sync/` | Template sync and content validation |
 | `utils/` | Test infrastructure utilities |
-
-**Total**: 23 Python test files
 
 See [tests/README.md](tests/README.md) for details.
 
@@ -65,15 +58,10 @@ Defined in `template-bundles.yml`:
 
 | Bundle | Description | Files |
 |--------|-------------|-------|
-| `core` | Core Rhiza infrastructure | 43 files |
+| `core` | Core Rhiza infrastructure | Makefile, rhiza.mk, make.d, root configs |
 | `github` | GitHub Actions workflows | CI/CD |
 | `tests` | Testing infrastructure | pytest, coverage |
-| `marimo` | Interactive notebooks | Marimo support |
-| `book` | Documentation generation | Book building |
-| `docker` | Docker containerization | Dockerfile |
-| `lfs` | Git LFS support | Large files |
-| `presentation` | Presentation building | reveal.js |
-| `devcontainer` | VS Code DevContainer | Dev environment |
+| `renovate` | Automated dependency updates | renovate.json |
 | `legal` | Legal documentation | LICENSE, CODE_OF_CONDUCT |
 
 ## 🎯 Key Make Targets
@@ -93,13 +81,8 @@ Defined in `template-bundles.yml`:
 - `make claude` - Claude Code interactive prompt
 
 ### Documentation
-- `make book` - Build documentation book
-- `make marimo` - Start Marimo server
-- `make presentation` - Generate presentation slides
-
-### Docker
-- `make docker-build` - Build Docker image
-- `make docker-run` - Run container
+- `make docs` - Generate API documentation with pdoc
+- `make mkdocs` - Serve the MkDocs site with live reload
 
 ### GitHub
 - `make view-prs` - List open pull requests
