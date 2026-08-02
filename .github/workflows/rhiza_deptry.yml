@@ -30,7 +30,7 @@ jobs:
       image: ghcr.io/astral-sh/uv:0.9.30-bookworm
 
     steps:
-      - uses: actions/checkout@v6.1.0
+      - uses: actions/checkout@v7.0.1
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
