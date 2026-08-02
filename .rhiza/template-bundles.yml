@@ -46,9 +46,6 @@ bundles:
       - .rhiza/make.d/releasing.mk
       - .rhiza/make.d/README.md
       - .rhiza/assets
-      - .rhiza/requirements/README.md
-      - .rhiza/requirements/docs.txt
-      - .rhiza/requirements/tools.txt
 
       # Root configuration files
       - Makefile
@@ -174,20 +171,16 @@ bundles:
     files:
       # Make targets and configuration
       - .rhiza/make.d/test.mk
-      - .rhiza/requirements/tests.txt
       - pytest.ini
 
       # Core/generic test files
       - .rhiza/tests
 
-      # Benchmark and stress test infrastructure
-      - tests/benchmarks
 
       # GitHub Actions workflows
       - .github/workflows/rhiza_ci.yml
       - .github/workflows/rhiza_security.yml
       - .github/workflows/rhiza_codeql.yml
-      - .github/workflows/rhiza_benchmarks.yml
 
   # ============================================================================
   # MARIMO - Interactive Marimo notebooks
@@ -199,7 +192,6 @@ bundles:
     files:
       # Marimo configuration
       - .rhiza/make.d/marimo.mk
-      - .rhiza/requirements/marimo.txt
 
       # Marimo notebooks directory
       - book/marimo

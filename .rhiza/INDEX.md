@@ -12,7 +12,6 @@ Quick reference to all utilities, makefiles, and resources in the `.rhiza/` dire
 ├── .env                  # Environment variables
 ├── template-bundles.yml  # Template bundle definitions
 ├── make.d/               # Makefile extensions (auto-loaded)
-├── requirements/         # Python dependencies
 ├── scripts/              # Shell scripts and utilities
 ├── templates/            # Project templates
 ├── tests/                # Test suite
@@ -40,17 +39,6 @@ Quick reference to all utilities, makefiles, and resources in the `.rhiza/` dire
 | `test.mk` | 5.1K | Testing infrastructure | Development and Testing |
 
 **Total**: 14 makefiles, ~41KB
-
-## 📦 Requirements (`.rhiza/requirements/`)
-
-| File | Purpose |
-|------|---------|
-| `docs.txt` | Documentation generation dependencies (pdoc) |
-| `marimo.txt` | Marimo notebook dependencies |
-| `tests.txt` | Testing dependencies (pytest, coverage) |
-| `tools.txt` | Development tools (pre-commit, python-dotenv) |
-
-See [requirements/README.md](requirements/README.md) for details.
 
 ## 🧪 Test Suite (`.rhiza/tests/`)
 
