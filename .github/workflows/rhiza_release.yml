@@ -66,7 +66,7 @@ jobs:
       tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -97,7 +97,7 @@ jobs:
     needs: tag
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -141,7 +141,7 @@ jobs:
 
       - name: Install Python for SBOM generation
         if: hashFiles('pyproject.toml') != ''
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version-file: .python-version
 
@@ -229,7 +229,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -274,7 +274,7 @@ jobs:
     if: needs.pypi.result == 'success'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -291,7 +291,7 @@ jobs:
           uv sync --all-extras --all-groups --frozen
 
       - name: Set up Python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
 
       - name: Generate PyPI Link
         id: pypi_link
