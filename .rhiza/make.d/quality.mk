@@ -12,13 +12,5 @@ deptry: install-uv ## Run deptry
 		$(UVX_BIN) -p ${PYTHON_VERSION} deptry ${SOURCE_FOLDER}; \
 	fi
 
-	@if [ -d ${MARIMO_FOLDER} ]; then \
-		if [ -d ${SOURCE_FOLDER} ]; then \
-			$(UVX_BIN) -p ${PYTHON_VERSION} deptry ${MARIMO_FOLDER} ${SOURCE_FOLDER} --ignore DEP004; \
-		else \
-		  	$(UVX_BIN) -p ${PYTHON_VERSION} deptry ${MARIMO_FOLDER} --ignore DEP004; \
-		fi \
-	fi
-
 fmt: install-uv ## check the pre-commit hooks and the linting
 	@${UVX_BIN} -p ${PYTHON_VERSION} pre-commit run --all-files

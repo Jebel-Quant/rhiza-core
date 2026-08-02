@@ -114,15 +114,6 @@ line-ending = "auto"
     "RUF002",   # Allow ambiguous unicode in project tests
     "RUF012",   # Allow mutable class attributes in project tests
 ]
-# Marimo notebooks - allow flexible coding patterns for interactive exploration
-"**/marimo/**/*.py" = [
-    "N803",    # Allow non-lowercase variable names in notebooks
-    "S101",    # Allow assert statements in notebooks
-    "PLC0415", # Allow imports not at top-level in notebooks
-    "B018",    # Allow useless expressions in notebooks
-    "RUF001",  # Allow ambiguous unicode in notebooks
-    "RUF002",  # Allow ambiguous unicode in notebooks
-]
 # Internal utility scripts - specific exceptions for internal tooling
 ".rhiza/utils/*.py" = [
     "PLW2901",  # Allow loop variable overwriting in utility scripts

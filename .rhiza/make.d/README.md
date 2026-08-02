@@ -54,7 +54,7 @@ deploy-dev:
 ```
 
 ### 5. Install System Dependencies
-**Goal**: Ensure `graphviz` is installed for Marimo notebooks using a hook.
+**Goal**: Ensure a system package such as `graphviz` is installed, using a hook.
 
 Add to your root `Makefile`:
 ```makefile
@@ -86,16 +86,11 @@ pre-install::
 | File | Purpose |
 |------|---------|
 | `agentic.mk` | AI agent integrations (copilot, claude) |
-| `book.mk` | Documentation book generation |
 | `bootstrap.mk` | Installation and environment setup |
 | `custom-env.mk` | Example environment customizations |
 | `custom-task.mk` | Example custom tasks |
-| `docker.mk` | Docker build and run targets |
-| `docs.mk` | Documentation generation (pdoc) |
+| `docs.mk` | Documentation generation (pdoc, MkDocs) |
 | `github.mk` | GitHub CLI integrations |
-| `lfs.mk` | Git LFS management |
-| `marimo.mk` | Marimo notebook support |
-| `presentation.mk` | Presentation building (Marp) |
 | `quality.mk` | Code quality and formatting |
 | `releasing.mk` | Release and versioning |
 | `test.mk` | Testing infrastructure |
@@ -105,8 +100,8 @@ Files prefixed with `custom-` are **examples** showing how to customize Rhiza. D
 ### Naming Conventions
 
 **Targets**: Lowercase with hyphens, verb-noun format
-- ✅ `install-uv`, `docker-build`, `view-prs`
-- ❌ `installUv`, `docker_build`
+- ✅ `install-uv`, `docs-coverage`, `view-prs`
+- ❌ `installUv`, `docs_coverage`
 
 **Variables**: SCREAMING_SNAKE_CASE
 - ✅ `INSTALL_DIR`, `UV_BIN`, `PYTHON_VERSION`

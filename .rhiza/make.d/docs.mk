@@ -12,8 +12,8 @@ MKDOCS_OUTPUT ?= _mkdocs
 # MkDocs config file location
 MKDOCS_CONFIG ?= docs/mkdocs.yml
 
-# Default pdoc template directory (can be overridden)
-PDOC_TEMPLATE_DIR ?= book/pdoc-templates
+# Optional pdoc template directory (unset by default; the recipe skips it if absent)
+PDOC_TEMPLATE_DIR ?=
 
 ##@ Documentation
 

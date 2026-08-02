@@ -24,9 +24,6 @@ REQUIRED_FOLDERS = [
 
 OPTIONAL_FOLDERS = [
     "tests",  # for tests/tests.mk
-    "docker",  # for docker/docker.mk, if referenced
-    "book",
-    "presentation",
 ]
 
 
@@ -106,7 +103,7 @@ def test_api_delegation(logger, setup_api_env):
 
 
 def test_minimal_setup_works(logger, setup_api_env):
-    """Test that make works even if optional folders (tests, docker, etc.) are missing."""
+    """Test that make works even if optional folders (tests, etc.) are missing."""
     # Remove optional folders
     for folder in OPTIONAL_FOLDERS:
         p = setup_api_env / folder
@@ -124,9 +121,9 @@ def test_minimal_setup_works(logger, setup_api_env):
     assert "Rhiza Workflows" in result.stdout
     assert "sync" in result.stdout
 
-    # Note: docker-build and other targets from .rhiza/make.d/ are always present
-    # but they gracefully skip if their respective folders/files don't exist.
-    # This is by design - targets are always available but handle missing resources.
+    # Note: targets from .rhiza/make.d/ are always present but gracefully skip if
+    # their respective folders/files don't exist. This is by design - targets are
+    # always available but handle missing resources.
 
 
 def test_extension_mechanism(logger, setup_api_env):

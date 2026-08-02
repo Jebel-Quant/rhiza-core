@@ -1,5 +1,8 @@
 # Rhiza Copilot Instructions
 
+> **Retired.** `rhiza-core` is no longer maintained. Its Python, Go and Rust support
+> now lives in [`jebel-quant/rhiza`](https://github.com/jebel-quant/rhiza).
+
 You are working in a project that utilises the `rhiza` framework. Rhiza is a collection of reusable
 configuration templates and tooling designed to standardise and streamline modern Python development.
 
@@ -51,8 +54,7 @@ UV automatically uses these environment variables (set by the bootstrap process)
 - **Run Tests**: `make test` (runs `pytest` with coverage)
 - **Format Code**: `make fmt` (runs `ruff format` and `ruff check --fix`)
 - **Check Dependencies**: `make deptry` (checks for missing/unused dependencies)
-- **Marimo Notebooks**: `make marimo` (starts the Marimo notebook server)
-- **Build Documentation**: `make book` (builds the documentation book)
+- **Build Documentation**: `make docs` (generates API documentation with pdoc)
 - **Clean Environment**: `make clean` (removes build artifacts and stale branches)
 
 ### Troubleshooting
@@ -121,17 +123,12 @@ The Copilot coding agent environment is automatically configured via official Gi
 
 This file must exist on the default branch. The agent does not need to run any setup commands manually.
 
-For DevContainers and Codespaces, the `.devcontainer/` configuration and `bootstrap.sh` handle setup automatically.
-
 ## Project Structure
 
 - `src/`: Source code
 - `tests/`: Tests (pytest)
-- `assets/`: Static assets
-- `book/`: Documentation source
-- `docker/`: Docker configuration
-- `presentation/`: Presentation slides
-- `.rhiza/`: Rhiza-specific scripts and configurations
+- `docs/`: MkDocs documentation source
+- `.rhiza/`: Rhiza-specific configuration, makefile modules, and tests
 
 ## Coding Standards
 
@@ -152,5 +149,4 @@ For DevContainers and Codespaces, the `.devcontainer/` configuration and `bootst
 
 - `Makefile`: Main entry point for tasks.
 - `pyproject.toml`: Project configuration and dependencies.
-- `.devcontainer/bootstrap.sh`: Bootstrap script for dev containers.
 - `.github/workflows/copilot-setup-steps.yml`: Agent environment setup (runs before agent starts).

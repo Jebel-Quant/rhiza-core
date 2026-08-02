@@ -1,5 +1,9 @@
 # Rhiza Template Bundle Definitions
 #
+# RETIRED: rhiza-core is no longer maintained and has no consumers. These bundle
+# definitions are kept only so the repository remains internally consistent until
+# it is archived. Use jebel-quant/rhiza instead.
+#
 # This file defines template bundles - pre-configured sets of files that can be
 # included in downstream projects by selecting templates instead of listing
 # individual file paths.
@@ -8,15 +12,14 @@
 #
 #   templates:
 #     - tests
-#     - docker
-#     - marimo
+#     - github
 #
 # Instead of manually listing:
 #
 #   include: |
 #     .rhiza/make.d/test.mk
 #     pytest.ini
-#     docker/Dockerfile
+#     .github/workflows/rhiza_ci.yml
 #     ...
 
 # Schema version for this bundles file format
@@ -100,65 +103,6 @@ bundles:
       - CODE_OF_CONDUCT.md
 
   # ============================================================================
-  # DEVCONTAINER - VS Code DevContainer configuration
-  # ============================================================================
-  devcontainer:
-    description: "VS Code DevContainer configuration for consistent development environments"
-    standalone: true
-    requires: []
-    files:
-      # DevContainer configuration
-      - .devcontainer/devcontainer.json
-      - .devcontainer/bootstrap.sh
-
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_devcontainer.yml
-
-  # ============================================================================
-  # DOCKER - Docker containerization support
-  # ============================================================================
-  docker:
-    description: "Docker containerization support for building and running containers"
-    standalone: true
-    requires: []
-    files:
-      # Docker configuration and files
-      - docker/Dockerfile
-      - docker/Dockerfile.dockerignore
-
-      # Make targets
-      - .rhiza/make.d/docker.mk
-
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_docker.yml
-
-  # ============================================================================
-  # LFS - Git Large File Storage support
-  # ============================================================================
-  lfs:
-    description: "Git LFS (Large File Storage) installation and management"
-    standalone: true
-    requires: []
-    files:
-      # Make targets for LFS
-      - .rhiza/make.d/lfs.mk
-
-
-  # ============================================================================
-  # PRESENTATION - Presentation building with reveal.js
-  # ============================================================================
-  presentation:
-    description: "Presentation building using reveal.js and Marimo"
-    standalone: true
-    requires: []
-    recommends:
-      - marimo  # Presentations often use Marimo for interactive slides
-    files:
-      - .rhiza/make.d/presentation.mk
-
-  # ============================================================================
   # TESTS - Testing infrastructure with pytest, coverage, and type checking
   # ============================================================================
   tests:
@@ -178,41 +122,3 @@ bundles:
       - .github/workflows/rhiza_ci.yml
       - .github/workflows/rhiza_security.yml
       - .github/workflows/rhiza_codeql.yml
-
-  # ============================================================================
-  # MARIMO - Interactive Marimo notebooks
-  # ============================================================================
-  marimo:
-    description: "Interactive Marimo notebooks for data exploration and documentation"
-    standalone: true
-    requires: []
-    files:
-      # Marimo configuration
-      - .rhiza/make.d/marimo.mk
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_marimo.yml
-
-  # ============================================================================
-  # BOOK - Documentation book generation
-  # ============================================================================
-  book:
-    description: |
-      Comprehensive documentation book generation combining:
-      - API documentation (pdoc)
-      - Test coverage reports
-      - Test results
-      - Interactive notebooks (if marimo is enabled)
-    standalone: false
-    requires:
-      - tests  # Required: book needs test coverage and reports
-    recommends:
-      - marimo  # Optional: book works better with notebook exports
-    files:
-      # Book building configuration
-      - .rhiza/make.d/book.mk
-
-      # Documentation
-
-      # GitHub Actions workflows
-      - .github/workflows/rhiza_book.yml

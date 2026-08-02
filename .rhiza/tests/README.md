@@ -10,6 +10,7 @@ Tests are organized into purpose-driven subdirectories:
 Static assertions about file and directory presence. These tests verify that the repository contains the expected files, directories, and configuration structure without executing any subprocesses.
 
 - `test_project_layout.py` — Validates root-level files and directories
+- `test_template_bundles.py` — Validates every path in `template-bundles.yml` exists
 
 ### `api/`
 Makefile target validation via dry-runs. These tests verify that Makefile targets are properly defined and would execute the expected commands.
@@ -21,9 +22,9 @@ Makefile target validation via dry-runs. These tests verify that Makefile target
 ### `integration/`
 Tests requiring sandboxed git repositories or subprocess execution. These tests verify end-to-end workflows.
 
-- `test_release.py` — Release script functionality
-- `test_book_targets.py` — Documentation book build targets
-- `test_notebook_execution.py` — Marimo notebook execution validation
+- `test_test_mk.py` — `test.mk` target behaviour
+- `test_sbom.py` — SBOM generation and parsing
+- `test_virtual_env_unexport.py` — `VIRTUAL_ENV` unexport behaviour
 
 ### `sync/`
 Template sync, workflows, versioning, and content validation tests. These tests ensure that template synchronization and content validation work correctly.
