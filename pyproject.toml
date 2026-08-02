@@ -30,10 +30,10 @@ dev = [
     "pytest-html>=4.0",      # --html report, both branches of test.mk
     "hypothesis>=6.150.0",   # Property-based tests in tests/property/
     "defusedxml>=0.7.0",     # Safe XML parsing in test_sbom.py
-    "python-dotenv==1.2.1",  # Imported as `dotenv` in tests; pinned per the stricter former spec
+    "python-dotenv==1.2.2",  # Imported as `dotenv` in tests; pinned per the stricter former spec
 
     # Development tools (was .rhiza/requirements/tools.txt)
-    "ty==0.0.17",            # Type checker — `uv run ty check` in test.mk
+    "ty==0.0.65",            # Type checker — `uv run ty check` in test.mk
 
     # Documentation (was .rhiza/requirements/docs.txt)
     "interrogate>=1.7.0",    # Docstring coverage — `uv run interrogate` in test.mk
